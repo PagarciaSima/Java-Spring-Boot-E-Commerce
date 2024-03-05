@@ -1,0 +1,9 @@
+INDEX VERSION 1.134+C:\Users\pagarcia\OneDrive - Capgemini\Desktop\CURSOS\Java Spring Boot E-Commerce Ultimate Course\.metadata\.plugins\org.eclipse.jdt.core
+414051012.index
+1232957844.index
+530685039.index
+1865797976.index
+2044522446.index
+3978602150.index
+290242517.index
+1079049551.index
