@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+
+<html xmlns:th="http://www.thymeleaf.org">
+
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
+	
+		<title>Home - Shopme Admin</title>
+	
+		<div th:replace="commonFragments :: cssLinks"></div>
+		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+		<link rel="stylesheet" type="text/css" th:href="@{/css/users.css}" />
+		<script type="text/javascript" th:src="@{/webjars/jquery/jquery.min.js}"></script>
+		<script type="text/javascript" th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script>
+	
+	</head>
+
+	<body>
+		<div class="container-fluid users-container">
+			<!-- NAVBAR -->
+			<nav th:replace="commonFragments :: navbar"></nav>
+	
+			<!-- MANAGEMENT BUTTONS (EXPORT FILES AND CREATE USER) -->
+			<div class="mt-5">
+				<h2 class="text-center">Manage Users</h2>
+				<div class="text-center">
+					<a href="/ShopmeAdmin/users/new">
+						<i class="text-center fa-solid fa-user-plus fa-2x icon-green mt-3 mb-3 mr-2" title="New User"></i>
+					</a>
+					<a href="/ShopmeAdmin/users/export/csv">
+						<i class="text-center fa-solid fa-file-csv fa-2x icon-green mt-3 mb-3 mr-2" title="Export CSV"></i>
+					</a>
+					<a href="/ShopmeAdmin/users/export/excel">
+						<i class="text-center fa-regular fa-file-excel fa-2x icon-green mt-3 mb-3 mr-2" title="Export Excel"></i>
+					</a>
+					<a href="/ShopmeAdmin/users/export/pdf">
+						<i class="text-center fas fa-file-pdf fa-2x icon-green mt-3 mb-3 mr-2" title="Export PDF"></i>
+					</a>
+				</div>
+			</div>
+			<!-- SUCESS MESSAGE -->
+			<div th:if="${message != null}" class="alert alert-success text-center mt-3">
+				[[${message}]]<i class="ml-2 fa-solid fa-circle-check"></i>
+			</div>
+			<!-- ERROR MESSAGE -->
+			<div th:if="${errorMessage != null}" class="alert alert-danger text-center mt-3">
+				[[${errorMessage}]]<i class="ml-2 fa-solid fa-circle-exclamation"></i>
+			</div>
+			
+			<!-- SEARCH FORM / BAR -->
+			<div class="d-flex justify-content-center mt-3 mb-3">
+				<form th:action="@{/users/page/1}" class="form-inline" id="searchForm">
+					<input type="hidden" name="sortField" th:value="${sortField}" />
+					<input type="hidden" name="sortDir" th:value="${sortDir}" />
+					<div class="form-group d-flex align-items-center">
+						<label for="searchField" class="form-label font-weight-bold mr-2">Filter:</label>
+						<input type="search" name="keyword" th:value="${keyword}" required class="form-control mr-2" id="searchField"/>
+						<a href="#" class="fa-solid fa-magnifying-glass icon-green fa-2x" title="Search" id="submitSearch"></a>
+						<a href="#" class="fa-solid fa-filter-circle-xmark icon-dark fa-2x" title="Clear Filters"
+							onclick="clearFilter()"
+						></a>
+					</div>
+					
+				</form>
+			</div>
+			<!-- USERS INFO / SMALL SCREEN -->
+			<div class="less-details">
+				<div th:each="user : ${listUsers}" class="row m-1 mb-2">
+					<div class="col mt-1">
+						<span th:if="${user.photos == null}" class="fas fa-portrait fa-3x icon-green"></span>
+						<img th:if="${user.photos != null}" th:src="@{${user.photosImagePath}}" 
+							class="userImageTable shadow border rounded border-info"
+						/>
+						<div class="mt-2 sm-icon-container text-center">
+							<a th:if="${user.enabled == true}" class="fas fa-check-circle fa-2x icon-green mr-2 icon-sm" 
+								th:href="@{'/users/' + ${user.id} + '/enabled/false'}" title="Disable User"
+							></a>															
+							<a th:if="${user.enabled == false}" class="fas fa-check-circle fa-2x icon-dark mr-2 icon-sm" 
+								th:href="@{'/users/' + ${user.id} + '/enabled/true'}" title="Enable User"
+							></a>
+							<a class="fas fa-edit fa-2x icon-green icon-sm" th:href="@{'/users/edit/' + ${user.id}}"
+								title="Edit User"
+							></a>
+							<a class="ml-2 fas fa-trash fa-2x icon-red link-delete icon-sm" 
+								th:href="@{'/users/delete/' + ${user.id}}" title="Delete User"
+								th:userId="${user.id}"
+							>								
+							</a>
+						</div>
+					</div>
+					<div class="col">
+						<div class="font-weight-bold">Name: </div>
+						<div>[[${user.fullName}]]</div>
+						<div class="font-weight-bold">Roles: </div>
+						<div>[[${user.roles}]]</div>
+						
+							
+						
+					</div>
+				</div>	
+			</div>
+			
+			<!-- USERS TABLE MEDIUM / LARGE SCREEN -->
+			<table class="full-details table table-bordered table-striped table-hover table-responsive-xl mt-5 text-center">
+				<thead class="thead-dark">
+					<tr>
+						<!-- ID th -->
+						<th class="hideable-column">
+							<th th:replace="users_fragments/fragments :: column_link('id', 'User ID', 'tag')"/>
+						</th>
+						<th>Photos</th>
+						<!-- Email th -->
+						<th class="hideable-column">
+						<th th:replace="users_fragments/fragments :: column_link('email', 'E-mail', 'tag')"></th>
+						</th>
+						<!-- First Name th -->
+						<th th:replace="users_fragments/fragments :: column_link('firstName', 'First Name', 'none')"></th>
+						<!-- Last Name th -->
+						<th th:replace="users_fragments/fragments :: column_link('lastName', 'Last Name', 'none')"></th>
+						<th>Roles</th>
+						<!-- Enabled th -->
+						<th th:replace="users_fragments/fragments :: column_link('enabled', 'Enabled', 'none')"></th>
+						<th>Actions</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr th:each="user, userStatus : ${listUsers}">
+						<td class="hideable-column">[[${user.id}]]</td>
+						<td>
+							<span th:if="${user.photos == null}" class="fas fa-portrait fa-3x icon-green"></span>
+							<img th:if="${user.photos != null}" th:src="@{${user.photosImagePath}}" 
+								class="userImageTable shadow border rounded border-info"
+							/>
+						</td>
+						<td class="hideable-column">[[${user.email}]]</td>
+						<td>[[${user.firstName}]]</td>
+						<td>[[${user.lastName}]]</td>
+						<td>[[${user.roles}]]</td>
+						<td>
+							<a th:if="${user.enabled == true}" class="fas fa-check-circle fa-2x icon-green" 
+								th:href="@{'/users/' + ${user.id} + '/enabled/false'}" title="Disable User"
+							></a>															
+							<a th:if="${user.enabled == false}" class="fas fa-check-circle fa-2x icon-dark" 
+								th:href="@{'/users/' + ${user.id} + '/enabled/true'}" title="Enable User"
+							></a>
+						</td>
+						<td>
+							<a class="fas fa-edit fa-2x icon-green" th:href="@{'/users/edit/' + ${user.id}}"
+								title="Edit User"
+							></a>
+							<a class="ml-2 fas fa-trash fa-2x icon-red link-delete" 
+								th:href="@{'/users/delete/' + ${user.id}}" title="Delete User"
+								th:userId="${user.id}"
+							>								
+							</a>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+			
+			<!-- PAGINATION -->
+			<div class="text-center mt-4 mb-2" th:if="${totalItems > 0}">
+				<span class="font-weight-bold">
+					Showing users # [[${startCount}]] to [[${endCount}]] of [[${totalItems}]]
+				</span>
+			</div>
+			<div class="text-center m-1" th:unless="${totalItems > 0}">
+				<span class="text-success bold font-weight-bold">No users found</span>
+			</div>
+			<div th:if="${totalPages > 1}">
+				<nav aria-label="Users navigation">
+				  <ul class="pagination justify-content-center flex-wrap">
+				  	<li th:class="${currentPage > 1 ? 'page-item' : 'page-item disabled'}">
+						<a th:replace="users_fragments/fragments :: page_link(1, 'First')"></a> 
+					</li>
+				    <li th:class="${currentPage > 1 ? 'page-item' : 'page-item disabled'}">
+						<a th:replace="users_fragments/fragments :: page_link(${currentPage - 1}, 'Previous')"></a> 
+
+					</li>
+				    <li th:class="${currentPage != i ? 'page-item' : 'page-item active'}" 
+				    	th:each="i : ${#numbers.sequence(1, totalPages)}"
+			    	>
+			    		<a th:replace="users_fragments/fragments :: page_link(${i}, ${i})"></a> 
+				    </li>
+				    <li th:class="${currentPage < totalPages ? 'page-item' : 'page-item disabled'}">
+						<a th:replace="users_fragments/fragments :: page_link(${currentPage + 1}, 'Next')"></a> 
+					</li>
+					<li th:class="${currentPage < totalPages ? 'page-item' : 'page-item disabled'}">
+						<a th:replace="users_fragments/fragments :: page_link(${totalPages}, 'Last')"></a> 
+					</li>
+				  </ul>
+				</nav>
+			</div>
+			<!-- DELETE USER MODAL DIALOG -->
+			<div class="modal fade text-center" id="confirmModal">
+				<div class="modal-dialog">
+					<div class="modal-content">
+						<div class="modal-header text-center">
+							<h4 class="modal-title w-100 alert alert-warning">Delete confirmation
+								<i class="ml-2 fa-solid fa-circle-exclamation"></i>
+							</h4>
+							<button type="button" class="close" data-dismiss="modal">&times;</button>
+						</div>
+						<div class="modal-body">
+							<span id="confirmText"></span>
+						</div>
+						<div class="modal-footer">
+							<a id="yesButton" class="btn btn-success" href="">Yes</a>
+							<button type="button" class="btn btn-danger" data-dismiss="modal">No</button>
+						</div>
+					</div>
+				</div>
+			</div>
+			
+			<!-- FOOTER -->
+			<footer th:replace="commonFragments :: footer"></footer>
+		</div>
+		
+		<script type="text/javascript">
+			$(document).ready(function(e){
+				$('.hideable-column').remove();
+				$('#submitSearch').click(function(event) {
+					event.preventDefault();
+			        $('#searchForm').submit(); 
+			    });
+    
+				$('.link-delete').on('click', function(e){
+				    e.preventDefault(); // Evita el comportamiento predeterminado del enlace
+				    link = $(this);
+				    $("#yesButton").attr("href", link.attr("href"));
+				    userId = link.attr("userId");
+				    
+				    $("#confirmText").text("Are you sure you want to delete this user ID (" + userId + ") ?")
+				    $("#confirmModal").modal();
+				});
+
+			});
+			
+			function clearFilter(){
+				window.location = "[[@{/users}]]"
+			}
+		</script>
+	</body>
+
+</html>
