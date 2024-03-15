@@ -9,7 +9,7 @@ public class MainController {
 	// Handler method for main page
 	@GetMapping("")
 	public String viewHomePage() {
-		return "index";
+		return "/index";
 	}
 	
 	@GetMapping("/login")

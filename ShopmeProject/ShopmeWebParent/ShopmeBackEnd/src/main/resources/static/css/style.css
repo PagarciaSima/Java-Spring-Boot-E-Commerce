@@ -14,8 +14,14 @@
 	color:red
 }
 
+.index-title{margin-top:200px}
+
+.navbar{flex-flow: row wrap;}   
+
+a{color:green;}
 a:hover{
 	text-decoration: none !important;
+	color: #2f662f;
 }
 
 a.icon-green:hover, a .icon-green:hover {
@@ -78,6 +84,17 @@ html, body {
 	position: absolute;
 }
 
+.dropdown-item-wrapper:active, .dropdown-item-wrapper:hover, .dropdown-item-wrapper:focus {
+	background-color:#28a745;
+	a, i{
+		color: white;
+		background-color:#28a745;
+	}
+}
+
+	
+.nav-link{cursor: pointer;}
+
 /* SMALL SCREEN */
 @media screen and (max-width:768px){
 	.full-details{display:none;}
@@ -94,15 +111,17 @@ html, body {
 /* MEDIUM SCREEN*/
 @media screen and (min-width:768px) and (max-width:1024px){
 	.less-details{display:none;}
-	.hideable-column{display: none;}
+	.show-hide{display: none;}
 	.table{display:table !important;}
 }
 
 /* LARGE SCREEN*/
 @media screen and (min-width:1024px){
 	.less-details{display:none;}
+	.show-hide{display: table-cell;}
 }
 
 @media screen and (min-width:1024px) and (max-width:1200px){
+	.less-details{display:none;}
 	.table{display:table !important;}
 }

@@ -28,7 +28,11 @@ public class UserService {
 		this.roleRepo = roleRepo;
 		this.passwordEncoder = passwordEncoder;
 	}
-
+	
+	public User getByEmail(String email) {
+		return userRepo.getUserByEmail(email);
+	}
+	
 	public List<User> listAll(){
 		return (List<User>) userRepo.findAll(Sort.by("firstName").ascending());
 	}
@@ -61,6 +65,24 @@ public class UserService {
 			encodePassword(user);
 		}		
 		return userRepo.save(user);	
+	}
+	
+	public User updateAccount(User userInForm) throws UserNotFoundException {
+		String userInFormPassword = userInForm.getPassword();
+		String userInFormPhotos = userInForm.getPhotos();
+		
+		User userInDB = userRepo.findById(userInForm.getId())
+				.orElseThrow(() -> new UserNotFoundException("Could not find any user with ID " + userInForm.getId()));
+		if (!userInFormPassword.isEmpty()) {
+			userInDB.setPassword(userInFormPassword);
+			encodePassword(userInDB);
+		}
+		if (userInFormPhotos != null) {
+			userInDB.setPhotos(userInFormPhotos);
+		}
+		userInDB.setFirstName(userInForm.getFirstName());
+		userInDB.setLastName(userInForm.getLastName());
+		return userRepo.save(userInDB);
 	}
 	
 	private void encodePassword(User user) {

@@ -8,18 +8,16 @@
 	
 		<title>Home - Shopme Admin</title>
 	
-		<div th:replace="commonFragments :: cssLinks"></div>
-		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+		<div th:replace="/users_fragments/commonFragments :: cssLinks"></div>
 		<link rel="stylesheet" type="text/css" th:href="@{/css/users.css}" />
-		<script type="text/javascript" th:src="@{/webjars/jquery/jquery.min.js}"></script>
-		<script type="text/javascript" th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script>
-	
 	</head>
 
 	<body>
 		<div class="container-fluid users-container">
+			<!-- LOG OUT HIDDEN FORM -->
+			<form th:replace="/users_fragments/commonFragments :: hidden-logout-form"></form>
 			<!-- NAVBAR -->
-			<nav th:replace="commonFragments :: navbar"></nav>
+			<nav th:replace="/users_fragments/commonFragments :: navbar"></nav>
 	
 			<!-- MANAGEMENT BUTTONS (EXPORT FILES AND CREATE USER) -->
 			<div class="mt-5">
@@ -93,47 +91,44 @@
 						<div class="font-weight-bold">Name: </div>
 						<div>[[${user.fullName}]]</div>
 						<div class="font-weight-bold">Roles: </div>
-						<div>[[${user.roles}]]</div>
-						
-							
-						
+						<div>[[${user.roles}]]</div>	
 					</div>
 				</div>	
 			</div>
-			
 			<!-- USERS TABLE MEDIUM / LARGE SCREEN -->
 			<table class="full-details table table-bordered table-striped table-hover table-responsive-xl mt-5 text-center">
 				<thead class="thead-dark">
 					<tr>
 						<!-- ID th -->
-						<th class="hideable-column">
-							<th th:replace="users_fragments/fragments :: column_link('id', 'User ID', 'tag')"/>
+						<th class="show-hide">
+							<th th:replace="users_fragments/users :: column_link('id', 'User ID', 'tag')"/>
 						</th>
+						
 						<th>Photos</th>
 						<!-- Email th -->
-						<th class="hideable-column">
-						<th th:replace="users_fragments/fragments :: column_link('email', 'E-mail', 'tag')"></th>
+						<th class="show-hide">
+							<th th:replace="users_fragments/users :: column_link('email', 'E-mail', 'tag')"></th>
 						</th>
 						<!-- First Name th -->
-						<th th:replace="users_fragments/fragments :: column_link('firstName', 'First Name', 'none')"></th>
+						<th th:replace="users_fragments/users :: column_link('firstName', 'First Name', 'none')"></th>
 						<!-- Last Name th -->
-						<th th:replace="users_fragments/fragments :: column_link('lastName', 'Last Name', 'none')"></th>
+						<th th:replace="users_fragments/users :: column_link('lastName', 'Last Name', 'none')"></th>
 						<th>Roles</th>
 						<!-- Enabled th -->
-						<th th:replace="users_fragments/fragments :: column_link('enabled', 'Enabled', 'none')"></th>
+						<th th:replace="users_fragments/users :: column_link('enabled', 'Enabled', 'none')"></th>
 						<th>Actions</th>
 					</tr>
 				</thead>
 				<tbody>
 					<tr th:each="user, userStatus : ${listUsers}">
-						<td class="hideable-column">[[${user.id}]]</td>
+						<td class="show-hide">[[${user.id}]]</td>
 						<td>
 							<span th:if="${user.photos == null}" class="fas fa-portrait fa-3x icon-green"></span>
 							<img th:if="${user.photos != null}" th:src="@{${user.photosImagePath}}" 
 								class="userImageTable shadow border rounded border-info"
 							/>
 						</td>
-						<td class="hideable-column">[[${user.email}]]</td>
+						<td class="show-hide">[[${user.email}]]</td>
 						<td>[[${user.firstName}]]</td>
 						<td>[[${user.lastName}]]</td>
 						<td>[[${user.roles}]]</td>
@@ -172,22 +167,22 @@
 				<nav aria-label="Users navigation">
 				  <ul class="pagination justify-content-center flex-wrap">
 				  	<li th:class="${currentPage > 1 ? 'page-item' : 'page-item disabled'}">
-						<a th:replace="users_fragments/fragments :: page_link(1, 'First')"></a> 
+						<a th:replace="users_fragments/users :: page_link(1, 'First')"></a> 
 					</li>
 				    <li th:class="${currentPage > 1 ? 'page-item' : 'page-item disabled'}">
-						<a th:replace="users_fragments/fragments :: page_link(${currentPage - 1}, 'Previous')"></a> 
+						<a th:replace="users_fragments/users :: page_link(${currentPage - 1}, 'Previous')"></a> 
 
 					</li>
 				    <li th:class="${currentPage != i ? 'page-item' : 'page-item active'}" 
 				    	th:each="i : ${#numbers.sequence(1, totalPages)}"
 			    	>
-			    		<a th:replace="users_fragments/fragments :: page_link(${i}, ${i})"></a> 
+			    		<a th:replace="users_fragments/users :: page_link(${i}, ${i})"></a> 
 				    </li>
 				    <li th:class="${currentPage < totalPages ? 'page-item' : 'page-item disabled'}">
-						<a th:replace="users_fragments/fragments :: page_link(${currentPage + 1}, 'Next')"></a> 
+						<a th:replace="users_fragments/users :: page_link(${currentPage + 1}, 'Next')"></a> 
 					</li>
 					<li th:class="${currentPage < totalPages ? 'page-item' : 'page-item disabled'}">
-						<a th:replace="users_fragments/fragments :: page_link(${totalPages}, 'Last')"></a> 
+						<a th:replace="users_fragments/users :: page_link(${totalPages}, 'Last')"></a> 
 					</li>
 				  </ul>
 				</nav>
@@ -214,9 +209,11 @@
 			</div>
 			
 			<!-- FOOTER -->
-			<footer th:replace="commonFragments :: footer"></footer>
+			<footer th:replace="/users_fragments/commonFragments :: footer"></footer>
 		</div>
 		
+		<!-- js -->
+		<div th:replace="/users_fragments/commonFragments :: jsScripts"></div>
 		<script type="text/javascript">
 			$(document).ready(function(e){
 				$('.hideable-column').remove();

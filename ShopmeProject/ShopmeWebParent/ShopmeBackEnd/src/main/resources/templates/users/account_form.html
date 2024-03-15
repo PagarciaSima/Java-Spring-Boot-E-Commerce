@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+
+<html xmlns:th="http://www.thymeleaf.org">
+
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
+	
+		<title>Account details</title>
+		<link rel="stylesheet" type="text/css" th:href="@{/css/user_form.css}" />
+		<div th:replace="/users_fragments/commonFragments :: cssLinks"></div>
+	</head>
+	
+	<body>
+		<div class="container-fluid form-container">
+			<!-- LOG OUT HIDDEN FORM -->
+			<form th:replace="/users_fragments/commonFragments :: hidden-logout-form"></form>
+			<!-- NAVBAR -->
+			<nav th:replace="/users_fragments/commonFragments :: navbar"></nav>
+	
+			<!-- TITLE -->
+			<div class="mt-5">
+				<h2 class="text-center">Account Details</h2>
+			</div>
+			
+			<!-- SUCESS MESSAGE -->
+			<div th:if="${message != null}" class="alert alert-success text-center mt-3">
+				[[${message}]]<i class="ml-2 fa-solid fa-circle-check"></i>
+			</div>
+	
+			<!-- ACCOUNT FORM -->
+			<div class="mb-3 mt-3">
+				<form th:action="@{/account/update}" method="post" th:object="${user}"enctype="multipart/form-data">
+				
+					<input type="hidden" th:field="*{id}" class="mt-3"/>
+					<div class="border border-secondary rounded p-5">
+						
+						<div class="form-group row">
+							<label for="email" class="col-sm-4 col-form-label"><strong>E-mail:</strong></label>
+							<div class="col-sm-8">
+								<input id="email" type="email" class="form-control" th:field="*{email}" readonly="readonly"/>
+							</div>
+						</div>
+						
+						<div class="form-group row">
+							<label for="firstName" class="col-sm-4 col-form-label"><strong>First-Name:</strong></label>
+							<div class="col-sm-8">
+								<input id="firstName" type="text" class="form-control" th:field="*{firstName}" required
+									minlength="2" maxlength="45" />
+							</div>
+						</div>
+						
+						<div class="form-group row">
+							<label for="lastName" class="col-sm-4 col-form-label"><strong>Last-Name:</strong></label>
+							<div class="col-sm-8">
+								<input id="lastName" type="text" class="form-control" th:field="*{lastName}" required
+									minlength="2" maxlength="45" />
+							</div>
+						</div>
+						
+						<div class="form-group row">
+							<label for="password" class="col-sm-4 col-form-label"><strong>Password:</strong></label>
+							<div class="col-sm-8">
+								<input id="password" type="password" class="form-control" th:field="*{password}" 
+									placeholder="Leave blank if you don't want to change password" minlength="8" 
+									maxlength="20" oninput="checkPasswordMatch()"
+								/>
+							</div>
+						</div>
+						
+						<div class="form-group row">
+							<label for="password" class="col-sm-4 col-form-label"><strong>Confirm Password:</strong></label>
+							<div class="col-sm-8">
+								<input id="confirmPassword" type="password" class="form-control" minlength="8" maxlength="20" 
+									oninput="checkPasswordMatch()"
+								/>
+							</div>
+						</div>
+						
+						<div class="form-group row">
+							<label for="password" class="col-sm-4 col-form-label"><strong>Assigned Roles:</strong></label>
+							<div class="col-sm-8">
+								<span><b>[[${user.roles}]]</b></span>
+							</div>
+						</div>
+						
+						<div class="form-group row">
+							<label for="password" class="label-photo col-md-4 col-form-label"><strong>Photos:</strong></label>
+							<div class="col-md-8 fileImage-wrapper">
+								<input type="hidden" th:field="*{photos}" />
+								<input class="border border-success" type="file" id="fileImage" accept="image/png, image/jpeg"
+									name="image"
+								/>	
+							</div>
+						</div>	
+						
+						<!-- PHOTO AND INPUT FILE BLOCK-->
+						<div class="d-flex justify-content-center">
+							<div class="shadow card bg-light mb-3" style="max-width: 18rem;">
+								<div class="card-header text-center border rounded border-secondary bg-success">
+									Selected Photo
+								</div>
+								<div class="card-body text-center">
+									<img id="thumbnail" alt="Photos preview"  th:src="@{${user.photosImagePath}}"  
+									class="img-fluid"
+									/>
+								</div>
+							</div>
+						</div>
+	
+						
+						<div class="text-center mt-3">
+							<input type="submit" value="Save" class="btn btn-success mr-2" />
+							<input type="button" value="Cancel" class="btn btn-danger" id="buttonCancel" />
+						</div>
+						<!-- -->
+					</div>
+				</form>
+			</div>
+		</div>
+		<!-- FOOTER -->
+		<footer th:replace="/users_fragments/commonFragments :: footer"></footer>
+		
+		<!-- js -->
+		<div th:replace="/users_fragments/commonFragments :: jsScripts"></div>
+
+		<script type="text/javascript">
+			
+			moduleUrl = "[[@{/}]]";
+			function checkPasswordMatch(confirmPassword){
+				var password = $("#password").val();
+			    var confirmPassword = $("#confirmPassword").val();
+			    if(password != confirmPassword){
+			        $("#confirmPassword")[0].setCustomValidity("Passwords do not match!");
+			    }else{
+			        $("#confirmPassword")[0].setCustomValidity("");
+			    }
+			}
+		</script>
+		<script th:src="@{/js/users_form.js}"></script>
+	</body>
+</html>

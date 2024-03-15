@@ -8,8 +8,7 @@
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
 
-		<title>Home - Shopme Admin</title>
-		
+		<title>Home - Shopme Admin</title>	
 		<div th:replace="/users_fragments/commonFragments :: cssLinks"></div>
 	</head>
 	
@@ -20,12 +19,8 @@
 			<!-- NAVBAR -->
 			<nav th:replace="/users_fragments/commonFragments :: navbar"></nav>
 			
-			<div class="text-center">
-				<h2 class="text-center index-title">Shopme Control Panel</h2>
-				<div class="mt-5 h4">Welcome 
-					<a sec:authentication="principal.fullName" th:href="@{/account}"></a>
-				</div>
-				<div class="h4" sec:authentication="principal.authorities"></div>	
+			<div class="text-center alert alert-danger mt-5">
+				<h2>Sorry, the requested page could not be found (404)<i class="ml-2 fa-solid fa-circle-exclamation"></i></h2>
 			</div>
 			
 			<!-- FOOTER -->
