@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+
+<html
+	xmlns:th="http://www.thymeleaf.org"
+>
+<head>
+	
+</head>
+<body>
+	<!-- PAGINATION -->
+	<div th:fragment="pagination(moduleURL, entityName)" th:remove="tag">
+		<div class="text-center mt-4 mb-2" th:if="${totalItems > 0}">
+			<span class="font-weight-bold">
+				Showing [[${entityName}]] # [[${startCount}]] to [[${endCount}]] of [[${totalItems}]]
+			</span>
+		</div>
+		<div class="text-center m-1" th:unless="${totalItems > 0}">
+			<span class="text-success bold font-weight-bold">No [[${entityName}]] found</span>
+		</div>
+		<div th:if="${totalPages > 1}" class="pagination-navigation">
+			<nav aria-label="pagination-navigation">
+			  <ul class="pagination justify-content-center flex-wrap">
+			  	<li th:class="${currentPage > 1 ? 'page-item' : 'page-item disabled'}">
+					<a th:replace="/fragments/pagination :: page_link(${moduleURL}, 1, 'First')"></a> 
+				</li>
+			    <li th:class="${currentPage > 1 ? 'page-item' : 'page-item disabled'}">
+					<a th:replace="/fragments/pagination :: page_link(${moduleURL}, ${currentPage - 1}, 'Previous')"></a> 
+				</li>
+			    <li th:class="${currentPage != i ? 'page-item' : 'page-item active'}" 
+			    	th:each="i : ${#numbers.sequence(1, totalPages)}"
+		    	>
+		    		<a th:replace="/fragments/pagination :: page_link(${moduleURL}, ${i}, ${i})"></a> 
+			    </li>
+			    <li th:class="${currentPage < totalPages ? 'page-item' : 'page-item disabled'}">
+					<a th:replace="/fragments/pagination :: page_link(${moduleURL}, ${currentPage + 1}, 'Next')"></a> 
+				</li>
+				<li th:class="${currentPage < totalPages ? 'page-item' : 'page-item disabled'}">
+					<a th:replace="/fragments/pagination :: page_link(${moduleURL}, ${totalPages}, 'Last')"></a> 
+				</li>
+			  </ul>
+			</nav>
+		</div>
+	</div>
+			
+	<!-- <a> FRAGMENT PAGINATION -->
+	<a th:fragment="page_link(moduleURL, pageNum, label)" class="page-link" th:href="@{${moduleURL} + '/page/' + ${pageNum} 
+		+ '?sortField=' + ${sortField} 
+		+ '&sortDir=' + ${sortDir} + ${keyword !=null ? '&keyword=' + keyword : ''}}">[[${label}]]
+	</a>
+
+</body>
+</html>

@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+
+<html xmlns:th="http://www.thymeleaf.org">
+
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
+	
+		<title>[[${pageTitle}]]</title>
+		<link rel="stylesheet" type="text/css" th:href="@{/css/form.css}" />
+		<div th:replace="fragments/cssLinks :: cssLinks"></div>
+
+	</head>
+	
+	<body>
+		<div class="container-fluid form-container">
+			<!-- LOG OUT HIDDEN FORM -->
+			<form th:replace="fragments/logoutform :: hidden-logout-form"></form>
+			<!-- NAVBAR -->
+			<nav th:replace="fragments/navbar :: navbar"></nav>
+	
+			<!-- CONTENT -->
+			<div class="mt-5 mb-3">
+				<h2 class="text-center">Manage Categories | [[${pageTitle}]]</h2>
+			</div>
+	
+			<!-- REGISTER FORM -->
+			<div class="mb-3">
+				<form th:action="@{/categories/save}" method="post" th:object="${category}" enctype="multipart/form-data"
+					onsubmit="return checkUnique(this)"
+				>
+					<input type="hidden" th:field="*{id}" class="mt-3"/>
+					<div class="border border-secondary rounded p-5">
+						<div class="form-group row">
+							<label for="name" class="col-sm-4 col-form-label"><strong>Category Name:</strong></label>
+							<div class="col-sm-8">
+								<input id="name" type="text" class="form-control" th:field="*{name}" required minlength="3"
+									maxlength="128" />
+							</div>
+						</div>	
+						
+						<div class="form-group row">
+							<label for="alias" class="col-sm-4 col-form-label"><strong>Alias:</strong></label>
+							<div class="col-sm-8">
+								<input id="alias" type="text" class="form-control" th:field="*{alias}" required
+									minlength="3" maxlength="64" />
+							</div>
+						</div>
+						
+						<div class="form-group row">
+							<label for="lastName" class="col-sm-4 col-form-label"><strong>Parent Category:</strong></label>
+							<div class="col-sm-8">
+								<select class="form-control" th:field="*{parent}">
+									<option value="0">[No Parent]</option>
+									<th:block th:each="cat: ${listCategories}">
+										<option th:value="${cat.id}">[[${cat.name}]]</option>
+									</th:block>
+								</select>
+							</div>
+						</div>
+
+						<div class="form-group row">
+							<label for="password" class="col-sm-4 col-form-label"><strong>Enabled:</strong></label>
+							<div class="col-sm-8 d-flex align-items-center">
+								<input type="checkbox" th:field="*{enabled}" class="mx-2 my-3" id="checkEnable"/>
+								<label class="fas fa-check-circle fa-2x icon-green" style="display: none;" for="checkEnable"
+									title="Enabled"
+								></label>									
+	        					<label class="fa-solid fa-ban fa-2x icon-dark"  style="display: none;" for="checkEnable"
+	        						title="Disabled"
+	        					></label>
+	       
+							</div>
+						</div>
+						
+						<div class="form-group row">
+							<label for="password" class="label-photo col-md-4 col-form-label"><strong>Image:</strong></label>
+							<div class="col-md-8 fileImage-wrapper">
+								<input type="hidden" th:field="*{image}" />
+								<input class="border border-success" type="file" id="fileImage" accept="image/png, image/jpeg"
+									name="fileImage" th:required="${category.imagePath == null}"
+								/>	
+							</div>
+						</div>	
+						
+						<!-- PHOTO AND INPUT FILE BLOCK-->
+						<div class="d-flex justify-content-center">
+							<div class="shadow card bg-light mb-3" style="max-width: 18rem;">
+								<div class="card-header text-center border rounded border-secondary bg-success">
+									Selected Image
+								</div>
+								<div class="card-body text-center">
+									<img id="thumbnail" alt="Image preview" class="img-fluid" 
+										th:src="@{${category.imagePath}}"/>	
+								</div>
+							</div>
+						</div>
+	
+						
+						<div class="text-center mt-3">
+							<input type="submit" value="Save" class="btn btn-success mr-2" />
+							<input type="button" value="Cancel" class="btn btn-danger" id="buttonCancel" />
+						</div>
+						<!-- -->
+					</div>
+				</form>
+			</div>
+		</div>
+		<!-- UNIQUE ALIAS / NAME MODAL DIALOG -->
+		<div th:replace="fragments/modals :: modal_dialog"></div>
+		<!-- FOOTER -->
+		<footer th:replace="fragments/footer :: footer"></footer>
+		
+		<!-- js -->
+		<div th:replace="fragments/jsScripts :: jsScripts"></div>
+		<script th:src="@{/js/createEdit_form.js}"></script>
+	</body>
+	<script type="text/javascript">		
+		moduleUrl = "[[@{/categories}]]";
+		$(document).ready(function () {	
+		   	toggleIcon($('#checkEnable').is(':checked'), $('#checkEnable'));
+		
+		    // Cambia los iconos cuando el estado del checkbox cambia
+		    $('#checkEnable').change(function() {
+		        toggleIcon(this.checked, $(this));
+		    });
+		});
+		
+		
+		function toggleIcon(isChecked, checkbox) {
+			var container = checkbox.closest('.form-group'); 
+   			var iconGreen = container.find('.icon-green');
+   			var iconDark = container.find('.icon-dark');
+	        if (isChecked) {
+	            iconGreen.show(); 
+        		iconDark.hide(); 
+	        } else {
+	            iconGreen.hide(); 
+        		iconDark.show(); 
+	        }
+	    }
+	    
+	    function checkUnique(form){
+			catId = $("#id").val();
+			catName = $("#name").val();
+			catAlias = $("#alias").val();
+			csrfValue = $("input[name='_csrf']").val();
+			url = "[[@{/categories/check_unique}]]";
+			params = {id: catId, name: catName, alias: catAlias, _csrf:  csrfValue};
+			
+			$.post(url, params, function(response){
+				if(response == "OK"){
+					form.submit();
+				}else if (response == "DuplicatedName"){
+					showModalDialog("Warning", "There is another category with the same name (" + catName + ")"
+					, "warning");
+				}else if (response == "DuplicatedAlias"){
+					showModalDialog("Warning", "There is another category with the same alias (" + catAlias + ")"
+					, "warning");
+				}else{
+					showModalDialog("Error", "Error, unknown response from server", "error");
+				}
+			}).fail(function(){
+					showModalDialog("Error", "Error, Could not connect to the server", "error");
+			});
+			return false;
+		}
+	</script>
+</html>

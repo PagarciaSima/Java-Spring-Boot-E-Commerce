@@ -13,17 +13,21 @@ public class MvcConfig implements WebMvcConfigurer {
 	
 	@Override
 	public void addResourceHandlers(ResourceHandlerRegistry registry) {
-	    String dirName = "user-photos";
-	    Path userPhotosDir = Paths.get(dirName).toAbsolutePath();
-	    String userPhotosPath = userPhotosDir.toString();
+	    registerUserImageResource(registry,  "user-photos");
+	    registerUserImageResource(registry,  "category-images");
+	}
+
+	private void registerUserImageResource(ResourceHandlerRegistry registry, String dirName ) {
+		
+	    Path dir = Paths.get(dirName).toAbsolutePath();
+	    String path = dir.toString();
 	    // Asegurar de que la ruta termine con '/' para evitar problemas en la resolución de la ruta.
-	    if (!userPhotosPath.endsWith(File.separator)) {
-	        userPhotosPath += File.separator;
+	    if (!path.endsWith(File.separator)) {
+	    	path += File.separator;
 	    }
 	    // Usar 'file:///' para garantizar la compatibilidad entre sistemas operativos
-	    String resourceLocation = "file:///" + userPhotosPath.replace("\\", "/");
+	    String resourceLocation = "file:///" + path.replace("\\", "/");
 	    registry.addResourceHandler("/" + dirName + "/**")
 	            .addResourceLocations(resourceLocation);
 	}
-	
 }

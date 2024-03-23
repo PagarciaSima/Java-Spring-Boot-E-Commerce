@@ -55,7 +55,7 @@ public class UserAccountController {
 			log.info("New user saved.");
 			String uploadDir = "user-photos/" + savedUser.getId();
 			// Delete any previous user image before saving another one
-			FileUploadUtil.cleanDir(uploadDir);
+			FileUploadUtil.removeDir(uploadDir);
 			FileUploadUtil.saveFile(uploadDir, fileName, multipartFile);		
 		} else {
 			if(user.getPhotos().isEmpty())

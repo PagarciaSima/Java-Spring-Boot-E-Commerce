@@ -9,24 +9,25 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
 
 		<title>Home - Shopme Admin</title>	
-		<div th:replace="/users_fragments/commonFragments :: cssLinks"></div>
+		<div th:replace="fragments/cssLinks :: cssLinks"></div>
 	</head>
 	
 	<body>
 		<div class="container-fluid" id="page-container">
 			<!-- LOG OUT HIDDEN FORM -->
-			<form th:replace="/users_fragments/commonFragments :: hidden-logout-form"></form>
+			<form th:replace="fragments/logoutform :: hidden-logout-form"></form>
+
 			<!-- NAVBAR -->
-			<nav th:replace="/users_fragments/commonFragments :: navbar"></nav>
+			<nav th:replace="fragments/navbar :: navbar"></nav>
 			
 			<div class="text-center alert alert-danger mt-5">
 				<h2>Sorry, an unexpected error has ocurred<i class="ml-2 fa-solid fa-circle-exclamation"></i></h2>
 			</div>
 			
 			<!-- FOOTER -->
-			<footer th:replace="/users_fragments/commonFragments :: footer"></footer>
+			<footer th:replace="fragments/footer :: footer"></footer>
 		</div>	
 		<!-- js -->
-		<div th:replace="/users_fragments/commonFragments :: jsScripts"></div>
+		<div th:replace="fragments/jsScripts :: jsScripts"></div>
 	</body>
 </html>

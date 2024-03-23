@@ -17,3 +17,18 @@ function customizeNavbarDropDownMenu(){
 	);
 }
 
+function showModalDialog(title, message, type){
+	$('#modalTitle').text(title);
+	iconElement = '<i class="ml-2 fa-solid fa-circle-exclamation modalIcon"></i>';
+	$('#modalTitle').append(iconElement);
+	if(type == 'error'){
+		$('#modalHeader').removeClass("alert-warning");
+		$('#modalHeader').addClass("alert-danger")
+	}else{
+		$('#modalHeader').removeClass("alert-danger");
+		$('#modalHeader').addClass("alert-warning")
+	}
+	$('#modalBody').text(message);
+	$("#modalDialog").modal();
+}
+

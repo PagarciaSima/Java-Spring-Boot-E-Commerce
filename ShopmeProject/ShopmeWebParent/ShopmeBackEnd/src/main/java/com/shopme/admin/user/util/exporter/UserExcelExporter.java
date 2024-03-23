@@ -14,20 +14,20 @@ import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
+import com.shopme.admin.AbstractExporter;
 import com.shopme.common.entity.User;
 
 public class UserExcelExporter extends AbstractExporter {
 	
 	private XSSFWorkbook workbook;
 	private XSSFSheet sheet;
-	private static  final int HEADER_NUMBER_COLUMNS = 6;
 	
 	public UserExcelExporter() {
 		workbook = new XSSFWorkbook();
 	}
 	
 	public void export(List<User> listUsers, HttpServletResponse response) throws IOException {
-		super.setResponseHeader(response,"application/octet.stream" , ".xlsx");
+		super.setResponseHeader(response,"application/octet.stream" , ".xlsx", "Users_");
 		writeHeaderLine();
 		writeDataLines(listUsers);
 		ServletOutputStream outputStream = response.getOutputStream();

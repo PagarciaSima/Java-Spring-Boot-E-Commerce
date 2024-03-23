@@ -7,16 +7,16 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
 	
 		<title>Account details</title>
-		<link rel="stylesheet" type="text/css" th:href="@{/css/user_form.css}" />
-		<div th:replace="/users_fragments/commonFragments :: cssLinks"></div>
+		<link rel="stylesheet" type="text/css" th:href="@{/css/form.css}" />
+		<div th:replace="fragments/cssLinks :: cssLinks"></div>
 	</head>
 	
 	<body>
 		<div class="container-fluid form-container">
 			<!-- LOG OUT HIDDEN FORM -->
-			<form th:replace="/users_fragments/commonFragments :: hidden-logout-form"></form>
+			<form th:replace="fragments/logoutform :: hidden-logout-form"></form>
 			<!-- NAVBAR -->
-			<nav th:replace="/users_fragments/commonFragments :: navbar"></nav>
+			<nav th:replace="fragments/navbar :: navbar"></nav>
 	
 			<!-- TITLE -->
 			<div class="mt-5">
@@ -119,10 +119,11 @@
 			</div>
 		</div>
 		<!-- FOOTER -->
-		<footer th:replace="/users_fragments/commonFragments :: footer"></footer>
+		<footer th:replace="fragments/footer :: footer"></footer>
+
 		
 		<!-- js -->
-		<div th:replace="/users_fragments/commonFragments :: jsScripts"></div>
+		<div th:replace="fragments/jsScripts :: jsScripts"></div>
 
 		<script type="text/javascript">
 			

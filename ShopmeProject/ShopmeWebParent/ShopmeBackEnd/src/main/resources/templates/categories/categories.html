@@ -1,0 +1,142 @@
+
+<!DOCTYPE html>
+
+<html xmlns:th="http://www.thymeleaf.org">
+
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
+	
+		<title>Home - Shopme Admin</title>
+	
+		<div th:replace="fragments/cssLinks :: cssLinks"></div>
+	</head>
+
+	<body>
+		<div class="container-fluid categories-container">
+			<!-- LOG OUT HIDDEN FORM -->
+			<form th:replace="fragments/logoutform :: hidden-logout-form"></form>
+			<!-- NAVBAR -->
+			<nav th:replace="fragments/navbar :: navbar"></nav>
+	
+			<!-- MANAGEMENT BUTTONS (EXPORT FILES AND CREATE USER) -->
+			<div class="mt-5">
+				<h2 class="text-center">Manage Categories</h2>
+				<div class="text-center">
+					<a th:href="@{categories/new}">
+						<i class="text-center fa fa-folder-plus fa-2x icon-green mt-3 mb-3 mr-2" title="New Category"></i>
+					</a>
+					<a th:href="@{/categories/export/csv}">
+						<i class="text-center fa-solid fa-file-csv fa-2x icon-green mt-3 mb-3 mr-2" title="Export CSV"></i>
+					</a>
+				</div>
+			</div>
+			<!-- SUCESS MESSAGE -->
+			<div th:if="${message != null}" class="alert alert-success text-center mt-3">
+				[[${message}]]<i class="ml-2 fa-solid fa-circle-check"></i>
+			</div>
+			<!-- ERROR MESSAGE -->
+			<div th:if="${errorMessage != null}" class="alert alert-danger text-center mt-3">
+				[[${errorMessage}]]<i class="ml-2 fa-solid fa-circle-exclamation"></i>
+			</div>
+			
+			<!-- SEARCH FORM / BAR -->
+			<div th:replace="fragments/searchForm :: search_form('/categories/page/1')"></div>
+			
+			<!-- USERS INFO / SMALL SCREEN -->
+			<div class="less-details">
+				<div th:each="cat : ${listCategories}" class="row m-1">
+					<div class="col-4">
+						<img th:src="@{${cat.imagePath}}" class="smImageCatTable shadow border rounded border-info"/>
+					</div>
+					<div class="col-8 text-center">
+						<div>[[${cat.name}]]</div>
+						<div class="mt-2">
+							<div th:replace="fragments/entityStatus :: status(${cat.enabled}, 'category', 
+								'/categories/' + ${cat.id}, '')"/>
+							<div th:replace="categories/categories :: category_actions('tag')"></div>
+						</div>
+					</div>
+				</div>	
+			</div>
+
+			<!-- CATEGORIES TABLE MEDIUM / LARGE SCREEN -->
+			<table class="full-details table table-bordered table-striped table-hover table-responsive-xl mt-5">
+				<thead class="thead-dark">
+					<tr>
+						<th>ID</th>
+						<th>Category Image</th>					
+						<th>
+							<th 
+								th:replace="/fragments/column_link :: column_link('/categories', 'name', 'Category name', 'tag')">		
+							</th>
+						</th>
+						<th class="show-hide">Alias</th>
+						<th>Enabled</th>
+						<th>Actions</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr th:each="cat, catStatus : ${listCategories}">
+						<td>[[${cat.id}]]</td>
+						<td>
+							<img th:src="@{${cat.imagePath}}"/>
+						</td>
+						<td>[[${cat.name}]]</td>
+						<td class="show-hide">[[${cat.alias}]]</td>
+						<td>
+							<div th:replace="fragments/entityStatus :: status(${cat.enabled}, 'category', '/categories/' 
+								+ ${cat.id}, '')"/>
+						</td>
+						<td th:fragment="category_actions(removeTag)" th:remove="${removeTag}">
+							<a class="fas fa-edit fa-2x icon-green" 
+								 th:href="@{'/categories/edit/' + ${cat.id}}" title="Edit this category"
+							></a>	
+							<th:block th:if="${cat.hasChildren == false}">
+								<a class="ml-2 fas fa-trash fa-2x icon-red ml-2 link-delete" 
+									th:href="@{'/categories/delete/' + ${cat.id}}"
+									title="Delete this category" th:entityId="${cat.id}"
+								>
+								</a>
+							</th:block>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+			<!-- PAGINATION -->
+			<div th:if="${keyword != null}" class="text-center font-weight-bold">
+				<span>Search result does not show categories in hierarchical form</span>
+				<div th:replace="fragments/pagination :: pagination('/categories', 'categories')"></div>
+			</div>
+			<th:block th:unless="${keyword != null}">
+				<div th:replace="fragments/pagination :: pagination('/categories', 'Top-level categories')"></div>
+			</th:block>
+		</div>
+		
+		<!-- CONFIRM DELETE CATEGORY MODAL -->
+		<div th:replace="fragments/modals :: confirm_modal"></div>
+		<!-- FOOTER -->
+		<footer th:replace="fragments/footer :: footer"></footer>
+		<!-- js -->
+		<div th:replace="fragments/jsScripts :: jsScripts"></div>
+		<script type="text/javascript" th:src="@{/js/common_list.js}"></script>
+		<script type="text/javascript">
+			moduleURL = "[[@{/categories}]]";
+			$(document).ready(function(e){
+				 $('#submitSearch').click(function(event) {
+					event.preventDefault();
+			        $('#searchForm').submit(); 
+			        
+			    });
+			    
+			    $(".link-delete").on("click", function(e){
+					e.preventDefault();
+					showDeleteConfirmModal($(this), 'Category');
+				});
+			});
+		</script>
+
+	</body>
+	
+</html>
+	

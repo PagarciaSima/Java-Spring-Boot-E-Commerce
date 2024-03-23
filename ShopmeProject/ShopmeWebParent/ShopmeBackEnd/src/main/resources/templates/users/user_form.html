@@ -7,25 +7,20 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
 	
 		<title>[[${pageTitle}]]</title>
-		<link rel="stylesheet" type="text/css" th:href="@{/css/user_form.css}" />
-		<div th:replace="/users_fragments/commonFragments :: cssLinks"></div>
+		<link rel="stylesheet" type="text/css" th:href="@{/css/form.css}" />
+		<div th:replace="fragments/cssLinks :: cssLinks"></div>
 	</head>
 	
 	<body>
 		<div class="container-fluid form-container">
 			<!-- LOG OUT HIDDEN FORM -->
-			<form th:replace="/users_fragments/commonFragments :: hidden-logout-form"></form>
+			<form th:replace="fragments/logoutform :: hidden-logout-form"></form>
 			<!-- NAVBAR -->
-			<nav th:replace="/users_fragments/commonFragments :: navbar"></nav>
+			<nav th:replace="fragments/navbar :: navbar"></nav>
 	
-			<!-- CONTENT -->
-			<div class="mt-5">
+			<!-- TITLE -->
+			<div class="mt-5 mb-3">
 				<h2 class="text-center">Manage Users | [[${pageTitle}]]</h2>
-				<div class="text-center">
-					<a href="/ShopmeAdmin/users/new">
-						<i class=" text-center fa-solid fa-user-plus fa-2x icon-green mt-3 mb-3" title="new user"></i>
-					</a>
-				</div>
 			</div>
 	
 			<!-- REGISTER FORM -->
@@ -134,29 +129,13 @@
 			
 			
 			<!-- DUPLICATED EMAIL MODAL DIALOG -->
-			<div class="modal fade text-center" id="modalDialog">
-				<div class="modal-dialog">
-					<div class="modal-content">
-						<div class="modal-header">
-							<h4 class="modal-title w-100 alert alert-warning" id="modalTitle">Warning	
-							</h4>
-							<button type="button" class="close" data-dismiss="modal">&times;</button>
-						</div>
-						<div class="modal-body">
-							<span id="modalBody"></span>
-						</div>
-						<div class="modal-footer">
-							<button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
+			<div th:replace="fragments/modals :: modal_dialog"></div>
+
 		<!-- FOOTER -->
-		<footer th:replace="/users_fragments/commonFragments :: footer"></footer>
+		<footer th:replace="fragments/footer :: footer"></footer>
 		
 		<!-- js -->
-		<div th:replace="/users_fragments/commonFragments :: jsScripts"></div>
+		<div th:replace="fragments/jsScripts :: jsScripts"></div>
 		<script type="text/javascript">
 			
 			moduleUrl = "[[@{/users}]]";
@@ -204,21 +183,8 @@
 				return false;
 			}
 			
-			function showModalDialog(title, message, type){
-				$('#modalTitle').text(title);
-				iconElement = '<i class="ml-2 fa-solid fa-circle-exclamation modalIcon"></i>';
-				$('#modalTitle').append(iconElement);
-				if(type == 'error'){
-					$('#modalTitle').removeClass("alert-warning");
-					$('#modalTitle').addClass("alert-danger")
-				}else{
-					$('#modalTitle').removeClass("alert-danger");
-					$('#modalTitle').addClass("alert-warning")
-				}
-				$('#modalBody').text(message);
-				$("#modalDialog").modal();
-			}
+			
 		</script>
-		<script th:src="@{/js/users_form.js}"></script>
+		<script th:src="@{/js/createEdit_form.js}"></script>
 	</body>
 </html>

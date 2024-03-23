@@ -91,6 +91,14 @@ public class UserController {
 			RedirectAttributes redirectAttributes, 
 			@RequestParam("image") MultipartFile multipartFile) throws IOException {
 		
+		String message;
+	    
+	    if (user.getId() == null) {
+	        message = "The new user has been created.";
+	    } else {
+	        message = "User information has been updated.";
+	    }
+		
 		if(!multipartFile.isEmpty()) {
 			String fileName = StringUtils.cleanPath(multipartFile.getOriginalFilename());
 			user.setPhotos(fileName);
@@ -98,14 +106,15 @@ public class UserController {
 			log.info("New user saved.");
 			String uploadDir = "user-photos/" + savedUser.getId();
 			// Delete any previous user image before saving another one
-			FileUploadUtil.cleanDir(uploadDir);
+			FileUploadUtil.removeDir(uploadDir);
 			FileUploadUtil.saveFile(uploadDir, fileName, multipartFile);		
 		} else {
 			if(user.getPhotos().isEmpty())
 				user.setPhotos(null);
 			service.save(user);
 		}
-		redirectAttributes.addFlashAttribute("message", "The user has been saved successfully");
+		
+		redirectAttributes.addFlashAttribute("message", message);
 		return redirectUrlToAffectedUser(user);
 	}
 
@@ -133,12 +142,13 @@ public class UserController {
 	}
 	
 	// Handler method to delete user
+	@GetMapping("/users/delete/{id}")
 	public String deleteUser(@PathVariable (name = "id") Integer id,
 			Model model,
 			RedirectAttributes redirectAttributes) {
 		try {
 			service.delete(id);
-			redirectAttributes.addFlashAttribute("message", "The user ID " + id + " has been deleted successfully");
+			redirectAttributes.addFlashAttribute("message", "The user ID " + id + " has been deleted successfully.");
 		}catch(UserNotFoundException ex) {
 			redirectAttributes.addFlashAttribute("errorMessage", ex.getMessage());
 		}
@@ -152,7 +162,7 @@ public class UserController {
 			RedirectAttributes redirectAttributes) {
 		service.updateUserEnabledStatus(id, enabled);
 		String status = enabled ? "enabled" : "disabled";
-		String message = "The user with ID " + id + " has been " + status;
+		String message = "The user with ID " + id + " has been " + status + ".";
 		redirectAttributes.addFlashAttribute("message", message);
 		return "redirect:/users";
 	}

@@ -29,7 +29,16 @@ public class FileUploadUtil {
 		}
 	}
 	
-	public static void cleanDir(String dir) {
+	public static void removeDir(String dir) {
+		cleanDir(dir);
+		try {
+			Files.delete(Paths.get(dir));
+		}catch (IOException e) {
+			log.error("Could not remove directory: " + dir);
+		}
+	}
+
+	private static void cleanDir(String dir) {
 		Path dirPath = Paths.get(dir);
 		try {
 			Files.list(dirPath).forEach(file -> {
@@ -37,12 +46,13 @@ public class FileUploadUtil {
 					try {
 						Files.delete(file);
 					}catch (IOException e) {
-						log.debug("Could not delete file: " + file);
+						log.error("Could not delete file: " + file);
 					}
 				}
 			});
+			
 		}catch(IOException ex) {
-			log.debug("Could not list directory: " + dirPath);
+			log.error("Could not list directory: " + dirPath);
 		}
 	}
 }

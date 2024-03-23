@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+
+<html
+	xmlns:th="http://www.thymeleaf.org"
+>
+<head>
+</head>
+<body>
+	<!-- LOG OUT HIDDEN FORM -->
+	<form th:fragment="hidden-logout-form" th:action="@{/logout}" method="post" th:hidden="true" name="logoutForm">
+		<input type="submit"/>
+	</form>
+
+</body>
+</html>

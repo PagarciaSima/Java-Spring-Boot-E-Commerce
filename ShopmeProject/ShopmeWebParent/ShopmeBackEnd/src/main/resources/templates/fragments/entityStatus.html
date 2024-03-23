@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+
+<html
+	xmlns:th="http://www.thymeleaf.org"
+>
+<head>
+	<meta charset="UTF-8">
+</head>
+<body>
+	<!-- STATUS (ENABLE / DISABLE) -->
+	<div th:fragment="status(enabled, entityName, entityURL, screen)" th:remove="tag">
+		<a th:if="${enabled == true}"
+			th:class="${screen == 'sm' ? 'icon-sm fas fa-check-circle fa-2x icon-green' : 
+				'fas fa-check-circle fa-2x icon-green'}"
+			th:href="@{${entityURL} + '/enabled/false'}" th:title="'Disable ' + ${entityName}"
+		></a>											
+		<a th:if="${enabled == false}"
+			th:class="${screen == 'sm' ? 'icon-sm fas fa-check-circle fa-2x icon-dark' : 
+				'fas fa-check-circle fa-2x icon-dark'}"
+			th:href="@{${entityURL} + '/enabled/true'}" th:title="'Enable ' + ${entityName}"
+		></a>												
+	</div>
+
+</body>
+</html>
