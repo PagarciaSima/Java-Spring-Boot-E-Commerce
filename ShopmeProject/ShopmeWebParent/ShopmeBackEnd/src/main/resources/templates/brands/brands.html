@@ -1,0 +1,108 @@
+
+<!DOCTYPE html>
+
+<html xmlns:th="http://www.thymeleaf.org">
+
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
+	
+		<title>Home - Shopme Admin</title>
+	
+		<div th:replace="fragments/cssLinks :: cssLinks"></div>
+	</head>
+
+	<body>
+		<div class="container-fluid categories-container">
+			<!-- LOG OUT HIDDEN FORM -->
+			<form th:replace="fragments/logoutform :: hidden-logout-form"></form>
+			<!-- NAVBAR -->
+			<nav th:replace="fragments/navbar :: navbar"></nav>
+	
+			<!-- MANAGEMENT BUTTONS (EXPORT FILES AND CREATE USER) -->
+			<div class="mt-5">
+				<h2 class="text-center">Manage Brands</h2>
+				<div class="text-center">
+					<a th:href="@{brands/new}">
+						<i class="text-center fa fa-folder-plus fa-2x icon-green mt-3 mb-3 mr-2" title="New Brand"></i>
+					</a>
+					<a th:href="@{/brands/export/csv}">
+						<i class="text-center fa-solid fa-file-csv fa-2x icon-green mt-3 mb-3 mr-2" title="Export CSV"></i>
+					</a>
+				</div>
+			</div>
+			<!-- SUCESS MESSAGE -->
+			<div th:if="${message != null}" class="alert alert-success text-center mt-3">
+				[[${message}]]<i class="ml-2 fa-solid fa-circle-check"></i>
+			</div>
+			<!-- ERROR MESSAGE -->
+			<div th:if="${errorMessage != null}" class="alert alert-danger text-center mt-3">
+				[[${errorMessage}]]<i class="ml-2 fa-solid fa-circle-exclamation"></i>
+			</div>
+			
+			<!-- SEARCH FORM / BAR -->
+			<div th:replace="fragments/searchForm :: search_form('/brands/page/1')"></div>
+
+			<!-- BRANDS TABLE MEDIUM / LARGE SCREEN -->
+			<table class="full-details table table-bordered table-striped table-hover table-responsive-xl mt-5">
+				<thead class="thead-dark">
+					<tr>
+						<th>Brand ID</th>
+						<th>Logo</th>					
+						<th>Brand Name</th>
+						<th>Categories</th>
+						<th>Actions</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr th:each="brand, brandStatus : ${listBrands}">
+						<td>[[${brand.id}]]</td>
+						<td>Logo.png</td>
+						<td>[[${brand.name}]]</td>
+						<td>
+							<th:block th:each="cat : ${brand.categories}">
+								<span class="badge badge-success shadow bg-body rounded" th:text="${cat.name}"></span>
+							</th:block>
+						</td>
+						<td th:fragment="category_actions(removeTag)" th:remove="${removeTag}">
+							<a class="fas fa-edit fa-2x icon-green" 
+								 th:href="@{'/brands/edit/' + ${brand.id}}" title="Edit this brand"
+							></a>	
+							<a class="ml-2 fas fa-trash fa-2x icon-red ml-2 link-delete" 
+								th:href="@{'/brands/delete/' + ${brand.id}}"
+								title="Delete this brand" th:entityId="${brand.id}"
+							>
+							</a>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+		
+		<!-- CONFIRM DELETE CATEGORY MODAL -->
+		<div th:replace="fragments/modals :: confirm_modal"></div>
+		<!-- FOOTER -->
+		<footer th:replace="fragments/footer :: footer"></footer>
+		<!-- js -->
+		<div th:replace="fragments/jsScripts :: jsScripts"></div>
+		<script type="text/javascript" th:src="@{/js/common_list.js}"></script>
+		<script type="text/javascript">
+			moduleURL = "[[@{/brands}]]";
+			$(document).ready(function(e){
+				 $('#submitSearch').click(function(event) {
+					event.preventDefault();
+			        $('#searchForm').submit(); 
+			        
+			    });
+			    
+			    $(".link-delete").on("click", function(e){
+					e.preventDefault();
+					showDeleteConfirmModal($(this), 'Category');
+				});
+			});
+		</script>
+
+	</body>
+	
+</html>
+	
