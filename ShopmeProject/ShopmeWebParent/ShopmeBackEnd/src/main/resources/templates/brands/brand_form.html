@@ -9,7 +9,6 @@
 		<title>[[${pageTitle}]]</title>
 		<link rel="stylesheet" type="text/css" th:href="@{/css/form.css}" />
 		<div th:replace="fragments/cssLinks :: cssLinks"></div>
-
 	</head>
 	
 	<body>
@@ -21,69 +20,34 @@
 	
 			<!-- CONTENT -->
 			<div class="mt-5 mb-3">
-				<h2 class="text-center">Manage Categories | [[${pageTitle}]]</h2>
+				<h2 class="text-center">Manage Brands | [[${pageTitle}]]</h2>
 			</div>
 	
 			<!-- REGISTER FORM -->
 			<div class="mb-3">
-				<form th:action="@{/categories/save}" method="post" th:object="${category}" enctype="multipart/form-data"
-					onsubmit="return checkUnique(this)"
-				>
+				<form th:action="@{/brands/save}" method="post" th:object="${brand}" enctype="multipart/form-data">
+				
 					<input type="hidden" th:field="*{id}" class="mt-3"/>
 					<div class="border border-secondary rounded p-5">
 						<div class="form-group row">
-							<label for="name" class="col-sm-4 col-form-label"><strong>Category Name:</strong></label>
+							<label for="name" class="col-sm-4 col-form-label"><strong>Brand Name:</strong></label>
 							<div class="col-sm-8">
 								<input id="name" type="text" class="form-control" th:field="*{name}" required minlength="3"
 									maxlength="128" />
 							</div>
 						</div>	
 						
-						<div class="form-group row">
-							<label for="alias" class="col-sm-4 col-form-label"><strong>Alias:</strong></label>
-							<div class="col-sm-8">
-								<input id="alias" type="text" class="form-control" th:field="*{alias}" required
-									minlength="3" maxlength="64" />
-							</div>
-						</div>
-						
-						<div class="form-group row">
-							<label for="lastName" class="col-sm-4 col-form-label"><strong>Parent Category:</strong></label>
-							<div class="col-sm-8">
-								<select class="form-control" th:field="*{parent}">
-									<option value="0">[No Parent]</option>
-									<th:block th:each="cat: ${listCategories}">
-										<option th:value="${cat.id}">[[${cat.name}]]</option>
-									</th:block>
-								</select>
-							</div>
-						</div>
-
-						<div class="form-group row">
-							<label for="password" class="col-sm-4 col-form-label"><strong>Enabled:</strong></label>
-							<div class="col-sm-8 d-flex align-items-center">
-								<input type="checkbox" th:field="*{enabled}" class="mx-2 my-3" id="checkEnable"/>
-								<label class="fas fa-check-circle fa-2x icon-green" style="display: none;" for="checkEnable"
-									title="Enabled"
-								></label>									
-	        					<label class="fa-solid fa-ban fa-2x icon-dark"  style="display: none;" for="checkEnable"
-	        						title="Disabled"
-	        					></label>
-	       
-							</div>
-						</div>
-						
 						<!-- PHOTO AND INPUT FILE BLOCK-->
 						<div class="form-group row">
-							<label for="fileImage" class="label-photo col-md-4 col-form-label"><strong>Image:</strong></label>
+							<label for="fileImage" class="label-photo col-md-4 col-form-label">
+								<strong>Brand Logo:</strong>
+							</label>
 							<div class="col-md-8 fileImage-wrapper">
-								<input type="hidden" th:field="*{image}" />
+								<input type="hidden" th:field="*{logo}" />
 								<input class="border border-success" type="file" id="fileImage" accept="image/png, image/jpeg"
-									name="fileImage" th:required="${category.imagePath == null}"
-								/>	
+									name="fileImage" required />	
 							</div>
 						</div>	
-						
 						
 						<div class="d-flex justify-content-center">
 							<div class="shadow card bg-light mb-3" style="max-width: 18rem;">
@@ -92,11 +56,34 @@
 								</div>
 								<div class="card-body text-center">
 									<img id="thumbnail" alt="Image preview" class="img-fluid" 
-										th:src="@{${category.imagePath}}"/>	
+										th:src="@{${brand.logoPath}}"/>	
 								</div>
 							</div>
 						</div>
 						
+						<!-- CATEGORIES SELECTOR -->
+						<div class="form-group row mt-3">
+							<label class="col-sm-4 col-form-label p-0" for="selectCat">
+								<strong>Select one or more categories:</strong>
+							</label>
+							<div class="col-sm-8">
+								<select class="form-control" th:field="*{categories}" multiple required id="selectCat"
+									style="resize: vertical; height: 200px"
+								>
+									<th:block th:each="cat: ${listCategories}">
+										<option th:value="${cat.id}">[[${cat.name}]]</option>
+									</th:block>
+								</select>
+							</div>
+						</div>
+
+						<div class="form-group row">
+							<label for="" class="col-sm-4 col-form-label"><strong>Chosen categories:</strong></label>
+							<div class="col-sm-8 d-flex align-items-center">
+									
+							</div>
+						</div>
+
 						<div class="text-center mt-3">
 							<input type="submit" value="Save" class="btn btn-success mr-2" />
 							<input type="button" value="Cancel" class="btn btn-danger" id="buttonCancel" />
@@ -105,7 +92,7 @@
 				</form>
 			</div>
 		</div>
-		<!-- UNIQUE ALIAS / NAME MODAL DIALOG -->
+		<!--  MODAL DIALOG -->
 		<div th:replace="fragments/modals :: modal_dialog"></div>
 		<!-- FOOTER -->
 		<footer th:replace="fragments/footer :: footer"></footer>
@@ -115,7 +102,7 @@
 		<script th:src="@{/js/createEdit_form.js}"></script>
 	</body>
 	<script type="text/javascript">		
-		moduleUrl = "[[@{/categories}]]";
+		moduleUrl = "[[@{/brands}]]";
 		$(document).ready(function () {	
 		   	toggleIcon($('#checkEnable').is(':checked'), $('#checkEnable'));
 		

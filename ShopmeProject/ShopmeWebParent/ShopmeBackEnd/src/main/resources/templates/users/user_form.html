@@ -93,8 +93,9 @@
 							</div>
 						</div>
 						
+						<!-- PHOTO AND INPUT FILE BLOCK-->
 						<div class="form-group row">
-							<label for="password" class="label-photo col-md-4 col-form-label"><strong>Photos:</strong></label>
+							<label for="fileImage" class="label-photo col-md-4 col-form-label"><strong>Photos:</strong></label>
 							<div class="col-md-8 fileImage-wrapper">
 								<input type="hidden" th:field="*{photos}" />
 								<input class="border border-success" type="file" id="fileImage" accept="image/png, image/jpeg"
@@ -102,8 +103,7 @@
 								/>	
 							</div>
 						</div>	
-						
-						<!-- PHOTO AND INPUT FILE BLOCK-->
+
 						<div class="d-flex justify-content-center">
 							<div class="shadow card bg-light mb-3" style="max-width: 18rem;">
 								<div class="card-header text-center border rounded border-secondary bg-success">
@@ -116,13 +116,11 @@
 								</div>
 							</div>
 						</div>
-	
-						
+					
 						<div class="text-center mt-3">
 							<input type="submit" value="Save" class="btn btn-success mr-2" />
 							<input type="button" value="Cancel" class="btn btn-danger" id="buttonCancel" />
 						</div>
-						<!-- -->
 					</div>
 				</form>
 			</div>

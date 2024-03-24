@@ -12,6 +12,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 @Entity
 @Table(name = "brands")
@@ -64,6 +65,14 @@ public class Brand {
 	}
 	public void setCategories(Set<Category> categories) {
 		this.categories = categories;
+	}
+	
+	@Transient
+	public String getLogoPath() {
+		if(this.id == null )
+			return "/images/image-thumbnail.png";
+		else 
+			return "/brand-logos/" + this.id + "/" + this.logo;
 	}
 
 	@Override
