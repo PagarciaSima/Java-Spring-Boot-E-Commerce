@@ -63,11 +63,11 @@
 						
 						<!-- CATEGORIES SELECTOR -->
 						<div class="form-group row mt-3">
-							<label class="col-sm-4 col-form-label p-0" for="selectCat">
+							<label class="col-sm-4 col-form-label p-0" for="categories">
 								<strong>Select one or more categories:</strong>
 							</label>
 							<div class="col-sm-8">
-								<select class="form-control" th:field="*{categories}" multiple required id="selectCat"
+								<select class="form-control" th:field="*{categories}" multiple required 
 									style="resize: vertical; height: 200px"
 								>
 									<th:block th:each="cat: ${listCategories}">
@@ -80,7 +80,9 @@
 						<div class="form-group row">
 							<label for="" class="col-sm-4 col-form-label"><strong>Chosen categories:</strong></label>
 							<div class="col-sm-8 d-flex align-items-center">
+								<div id="chosenCategories">
 									
+								</div>	
 							</div>
 						</div>
 
@@ -104,52 +106,23 @@
 	<script type="text/javascript">		
 		moduleUrl = "[[@{/brands}]]";
 		$(document).ready(function () {	
-		   	toggleIcon($('#checkEnable').is(':checked'), $('#checkEnable'));
-		
-		    // Cambia los iconos cuando el estado del checkbox cambia
-		    $('#checkEnable').change(function() {
-		        toggleIcon(this.checked, $(this));
-		    });
+			dropdownCategories = $("#categories");
+			divChosenCategories = $("#chosenCategories");
+			
+			dropdownCategories.change(function(){
+				divChosenCategories.empty();
+				showChosenCategories();
+			});
 		});
 		
-		
-		function toggleIcon(isChecked, checkbox) {
-			var container = checkbox.closest('.form-group'); 
-   			var iconGreen = container.find('.icon-green');
-   			var iconDark = container.find('.icon-dark');
-	        if (isChecked) {
-	            iconGreen.show(); 
-        		iconDark.hide(); 
-	        } else {
-	            iconGreen.hide(); 
-        		iconDark.show(); 
-	        }
-	    }
-	    
-	    function checkUnique(form){
-			catId = $("#id").val();
-			catName = $("#name").val();
-			catAlias = $("#alias").val();
-			csrfValue = $("input[name='_csrf']").val();
-			url = "[[@{/categories/check_unique}]]";
-			params = {id: catId, name: catName, alias: catAlias, _csrf:  csrfValue};
-			
-			$.post(url, params, function(response){
-				if(response == "OK"){
-					form.submit();
-				}else if (response == "DuplicatedName"){
-					showModalDialog("Warning", "There is another category with the same name (" + catName + ")"
-					, "warning");
-				}else if (response == "DuplicatedAlias"){
-					showModalDialog("Warning", "There is another category with the same alias (" + catAlias + ")"
-					, "warning");
-				}else{
-					showModalDialog("Error", "Error, unknown response from server", "error");
-				}
-			}).fail(function(){
-					showModalDialog("Error", "Error, Could not connect to the server", "error");
+		function showChosenCategories(){
+			dropdownCategories.children("option:selected").each(function(){
+				selectedCategory = $(this);
+				catId = selectedCategory.val();
+				catName = selectedCategory.text().replace(/-/g, "");
+				divChosenCategories.append("<span class='badge badge-success m-1 border border-secondary'>" + catName 
+					+ "</span>")
 			});
-			return false;
 		}
 	</script>
 </html>
