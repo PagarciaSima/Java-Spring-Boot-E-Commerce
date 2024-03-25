@@ -45,7 +45,7 @@
 							<div class="col-md-8 fileImage-wrapper">
 								<input type="hidden" th:field="*{logo}" />
 								<input class="border border-success" type="file" id="fileImage" accept="image/png, image/jpeg"
-									name="fileImage" required />	
+									name="fileImage" th:required="${brand.id == null}" />	
 							</div>
 						</div>	
 						
@@ -63,7 +63,7 @@
 						
 						<!-- CATEGORIES SELECTOR -->
 						<div class="form-group row mt-3">
-							<label class="col-sm-4 col-form-label p-0" for="categories">
+							<label class="col-sm-4 col-form-label" for="categories">
 								<strong>Select one or more categories:</strong>
 							</label>
 							<div class="col-sm-8">
@@ -113,6 +113,8 @@
 				divChosenCategories.empty();
 				showChosenCategories();
 			});
+			
+			showChosenCategories();
 		});
 		
 		function showChosenCategories(){
@@ -121,7 +123,7 @@
 				catId = selectedCategory.val();
 				catName = selectedCategory.text().replace(/-/g, "");
 				divChosenCategories.append("<span class='badge badge-success m-1 border border-secondary'>" + catName 
-					+ "</span>")
+					 + "</span>")
 			});
 		}
 	</script>

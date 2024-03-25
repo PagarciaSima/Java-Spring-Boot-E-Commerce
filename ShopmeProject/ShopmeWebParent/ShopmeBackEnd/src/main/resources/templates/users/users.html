@@ -108,7 +108,7 @@
 						<td>
 							<span th:if="${user.photos == null}" class="fas fa-portrait fa-3x icon-green"></span>
 							<img th:if="${user.photos != null}" th:src="@{${user.photosImagePath}}" 
-								class="userImageTable shadow border rounded border-info"
+								class="shadow border rounded border-info"
 							/>
 						</td>
 						<td class="show-hide">[[${user.email}]]</td>

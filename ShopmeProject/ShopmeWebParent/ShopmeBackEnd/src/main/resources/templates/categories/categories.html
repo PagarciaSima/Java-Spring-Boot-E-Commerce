@@ -80,7 +80,7 @@
 					<tr th:each="cat, catStatus : ${listCategories}">
 						<td>[[${cat.id}]]</td>
 						<td>
-							<img th:src="@{${cat.imagePath}}"/>
+							<img th:src="@{${cat.imagePath}}" class="shadow border rounded border-info"/>
 						</td>
 						<td>[[${cat.name}]]</td>
 						<td class="show-hide">[[${cat.alias}]]</td>
