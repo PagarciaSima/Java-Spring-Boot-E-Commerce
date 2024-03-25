@@ -25,7 +25,7 @@
 	
 			<!-- REGISTER FORM -->
 			<div class="mb-3">
-				<form th:action="@{/brands/save}" method="post" th:object="${brand}" enctype="multipart/form-data">
+				<form th:action="@{/brands/save}" method="post" th:object="${brand}" enctype="multipart/form-data" onsubmit="return checkUnique(this)">
 				
 					<input type="hidden" th:field="*{id}" class="mt-3"/>
 					<div class="border border-secondary rounded p-5">
@@ -125,6 +125,31 @@
 				divChosenCategories.append("<span class='badge badge-success m-1 border border-secondary'>" + catName 
 					 + "</span>")
 			});
+		}
+		
+		function checkUnique(form){
+			brandId = $("#id").val();
+			brandName = $("#name").val();
+			csrfValue = $("input[name='_csrf']").val();
+
+			url = "[[@{/brands/check_unique}]]";
+			params = {id: brandId, name: brandName, _csrf: csrfValue};
+			
+			$.post(url, params, function(response){
+				console.log("post")
+				if(response == "OK"){
+					form.submit();
+				}else if (response == "Duplicated"){
+					showModalDialog("Warning", "There is another brand registered with the name '" 
+						+ brandName + "'", "warning");
+				}else{
+					showModalDialog("Error", "Error, unknown response from server", "error");
+				}	
+			}).fail(function(){
+				console.log("fail")
+					showModalDialog("Error", "Error, Could not connect to the server", "error");
+			});
+			return false;
 		}
 	</script>
 </html>

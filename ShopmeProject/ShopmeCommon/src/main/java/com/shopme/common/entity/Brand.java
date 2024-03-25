@@ -42,6 +42,13 @@ public class Brand {
 		this.logo = "brand-logo.png";
 	}
 	
+	public Brand(Integer id, String name) {
+		super();
+		this.id = id;
+		this.name = name;
+		this.logo = "brand-logo.png";
+	}
+	
 	public Integer getId() {
 		return id;
 	}
