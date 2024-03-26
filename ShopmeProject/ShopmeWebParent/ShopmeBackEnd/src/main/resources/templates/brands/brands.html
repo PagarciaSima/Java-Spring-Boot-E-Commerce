@@ -13,7 +13,7 @@
 	</head>
 
 	<body>
-		<div class="container-fluid categories-container">
+		<div class="container-fluid brands-container">
 			<!-- LOG OUT HIDDEN FORM -->
 			<form th:replace="fragments/logoutform :: hidden-logout-form"></form>
 			<!-- NAVBAR -->
@@ -23,7 +23,7 @@
 			<div class="mt-5">
 				<h2 class="text-center">Manage Brands</h2>
 				<div class="text-center">
-					<a th:href="@{brands/new}">
+					<a th:href="@{/brands/new}">
 						<i class="text-center fa fa-folder-plus fa-2x icon-green mt-3 mb-3 mr-2" title="New Brand"></i>
 					</a>
 					<a th:href="@{/brands/export/csv}">
@@ -42,21 +42,36 @@
 			
 			<!-- SEARCH FORM / BAR -->
 			<div th:replace="fragments/searchForm :: search_form('/brands/page/1')"></div>
-
+			
+			<!-- CATEGORIES INFO / SMALL SCREEN -->
+			<div class="less-details">
+				<div th:each="brand : ${listBrands}" class="row m-1">
+					<div class="col-6 text-center">
+						<img th:src="@{${brand.logoPath}}" class="smImageCatTable shadow border rounded border-info"/>
+					</div>
+					<div class="col-6 text-center">
+						<div>[[${brand.name}]]</div>
+						<div class="mt-2">
+							<div th:replace="brands/brands :: brands_actions('tag')"></div>
+						</div>
+					</div>
+				</div>	
+			</div>
+			
 			<!-- BRANDS TABLE MEDIUM / LARGE SCREEN -->
 			<table class="full-details table table-bordered table-striped table-hover table-responsive-xl mt-5">
 				<thead class="thead-dark">
 					<tr>
-						<th>Brand ID</th>
-						<th>Logo</th>					
-						<th>Brand Name</th>
-						<th>Categories</th>
+						<th class="show-hide">Brand ID</th>
+						<th>Logo</th>	
+						<th th:replace="/fragments/column_link :: column_link('/brands', 'name', 'Brand name', 'none')"></th>				
+						<th>Categories</th>				
 						<th>Actions</th>
 					</tr>
 				</thead>
 				<tbody>
 					<tr th:each="brand, brandStatus : ${listBrands}">
-						<td>[[${brand.id}]]</td>
+						<td class="show-hide">[[${brand.id}]]</td>
 						<td>
 							<img th:src="@{${brand.logoPath}}" class="shadow border rounded border-info"/>
 						</td>
@@ -66,7 +81,7 @@
 								<span class="badge badge-success shadow bg-body rounded" th:text="${cat.name}"></span>
 							</th:block>
 						</td>
-						<td th:fragment="category_actions(removeTag)" th:remove="${removeTag}">
+						<td th:fragment="brands_actions(removeTag)" th:remove="${removeTag}">
 							<a class="fas fa-edit fa-2x icon-green" 
 								 th:href="@{'/brands/edit/' + ${brand.id}}" title="Edit this brand"
 							></a>	
@@ -79,6 +94,8 @@
 					</tr>
 				</tbody>
 			</table>
+			<!-- PAGINATION -->
+			<div th:replace="fragments/pagination :: pagination('/brands', 'brands')"></div>
 		</div>
 		
 		<!-- CONFIRM DELETE CATEGORY MODAL -->
