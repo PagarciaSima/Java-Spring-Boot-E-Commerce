@@ -6,7 +6,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.shopme.admin.brand.BrandService;
 import com.shopme.common.entity.Brand;
@@ -45,10 +47,16 @@ public class ProductController {
 	
 	// Handler method to save new Product
 	@PostMapping("/products/save")
-	public String saveProduct(Product product) {
-		System.out.println("Product name " + product.getName());
-		System.out.println("Product alias " + product.getAlias());
-		System.out.println("Product ID " + product.getId());
+	public String saveProduct(@ModelAttribute Product product,
+			RedirectAttributes redirectAttributes) {
+		String message;
+		if (product.getId() == null) {
+	        message = "The new product has been created.";
+	    } else {
+	        message = "Product information has been updated.";
+	    }
+		productService.save(product);
+		redirectAttributes.addFlashAttribute("message", message);
 		return "redirect:/products";
 	}
 }
