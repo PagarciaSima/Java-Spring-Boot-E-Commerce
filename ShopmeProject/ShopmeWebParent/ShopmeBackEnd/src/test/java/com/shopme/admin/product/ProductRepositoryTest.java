@@ -33,7 +33,7 @@ public class ProductRepositoryTest {
 		Category category = entityManager.find(Category.class, 5);
 		Product product = new Product();
 		product.setName("Acer Aspire Desktop");
-		product.setAlias("Acer Aspire Desktop");
+		product.setAlias("Acer_Aspire_Desktop");
 		product.setShortDescription("Short description for Acer Aspire Desktop");
 		product.setFullDescription("Full description Acer Aspire Desktop");
 		product.setBrand(brand);

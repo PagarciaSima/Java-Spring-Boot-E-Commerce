@@ -84,7 +84,7 @@ html, body {
     z-index: 1;          
 }
 
-.form-container, .users-container, .categories-container, .brands-container{
+.form-container, .wrapper-container{
     height: auto;
     padding-bottom: 200px;
 }

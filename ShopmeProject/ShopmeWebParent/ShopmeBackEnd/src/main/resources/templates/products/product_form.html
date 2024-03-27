@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+
+<html xmlns:th="http://www.thymeleaf.org">
+
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
+	
+		<title>[[${pageTitle}]]</title>
+		<link rel="stylesheet" type="text/css" th:href="@{/css/form.css}" />
+		<div th:replace="fragments/cssLinks :: cssLinks"></div>
+	</head>
+	
+	<body>
+		<div class="container-fluid form-container">
+			<!-- LOG OUT HIDDEN FORM -->
+			<form th:replace="fragments/logoutform :: hidden-logout-form"></form>
+			<!-- NAVBAR -->
+			<nav th:replace="fragments/navbar :: navbar"></nav>
+	
+			<!-- CONTENT -->
+			<div class="mt-5 mb-3">
+				<h2 class="text-center">Manage Products | [[${pageTitle}]]</h2>
+			</div>
+	
+			<!-- REGISTER FORM -->
+			<div class="mb-3">
+				<form th:action="@{/products/save}" method="post" th:object="${product}" class="product-form">
+					<input type="hidden" th:field="*{id}"/>
+					<div>
+						<ul class="nav nav-tabs" id="myTab" role="tablist">
+						  <li class="nav-item">
+						    <a class="nav-link active" data-toggle="tab" href="#overview" role="tab" 
+						    	aria-controls="Overview" aria-selected="true">Overview</a>
+						  </li>
+						  <li class="nav-item">
+						    <a class="nav-link" data-toggle="tab" href="#description" role="tab" 
+						    	aria-controls="Description" aria-selected="false">Description</a>
+						  </li>
+						  <li class="nav-item">
+						    <a class="nav-link" data-toggle="tab" href="#images" role="tab" 
+						    	aria-controls="Images" aria-selected="false">Images</a>
+						  </li>
+						  <li class="nav-item">
+						    <a class="nav-link" data-toggle="tab" href="#details" role="tab" 
+						    	aria-controls="Details" aria-selected="false">Details</a>
+						  </li>
+						</ul>
+						
+						<div class="tab-content">
+							<div class="tab-pane active p-3" id="overview" role="tabpanel" aria-labelledby="overview-tab">
+								<div th:replace="products/product_overview :: content"></div>
+							</div>
+							<div class="tab-pane" id="description" role="tabpanel" aria-labelledby="description-tab">
+								Description
+							</div>
+							<div class="tab-pane" id="images" role="tabpanel" aria-labelledby="images-tab">
+								Images
+							</div>
+							<div class="tab-pane" id="details" role="tabpanel" aria-labelledby="details-tab">
+								Details
+							</div>
+						</div>
+					</div>
+					<div class="text-center mt-3">
+						<input type="submit" value="Save" class="btn btn-success mr-2" />
+						<input type="button" value="Cancel" class="btn btn-danger" id="buttonCancel" />
+					</div>
+				</form>
+			</div>
+		</div>
+		<!--  MODAL DIALOG -->
+		<div th:replace="fragments/modals :: modal_dialog"></div>
+		<!-- FOOTER -->
+		<footer th:replace="fragments/footer :: footer"></footer>
+		
+		<!-- js -->
+		<div th:replace="fragments/jsScripts :: jsScripts"></div>
+		<script th:src="@{/js/createEdit_form.js}"></script>
+	</body>
+	
+	<script type="text/javascript">		
+		moduleUrl = "[[@{/products}]]";
+		brandModuleUrl = "[[@{/brands}]]";
+		dropdownBrands = $("#brand");
+		dropdownCategories = $("#category");
+		
+		$(document).ready(function(){
+			dropdownBrands.change(function(){
+				dropdownCategories.empty();
+				getCategories();
+			});
+			getCategories();
+		});
+		
+		function getCategories(){
+			brandId = dropdownBrands.val()
+			url = brandModuleUrl + "/" + brandId + "/categories";
+			$.get(url, function(responseJson){
+				$.each(responseJson, function(index, category){
+					$("<option>").val(category.id).text(category.name).appendTo(dropdownCategories);
+				});
+			});
+			
+		}
+	</script>
+</html>

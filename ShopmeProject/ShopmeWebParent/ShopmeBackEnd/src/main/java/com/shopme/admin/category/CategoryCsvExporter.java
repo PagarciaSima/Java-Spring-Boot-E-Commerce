@@ -11,7 +11,6 @@ import org.supercsv.io.CsvBeanWriter;
 import org.supercsv.io.ICsvBeanWriter;
 import org.supercsv.prefs.CsvPreference;
 
-import com.mysql.cj.log.LogFactory;
 import com.shopme.admin.AbstractExporter;
 import com.shopme.common.entity.Category;
 

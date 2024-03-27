@@ -2,6 +2,9 @@ form{
 	max-width: 43.75rem;
 	margin: 0 auto;
 }
+.product-form{
+	max-width: 100%;
+}
 #fileImage{
 	background-color: #28a745 !important;
     color: white;

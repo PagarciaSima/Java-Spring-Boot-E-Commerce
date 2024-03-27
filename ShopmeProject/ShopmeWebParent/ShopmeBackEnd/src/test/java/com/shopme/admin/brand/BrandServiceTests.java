@@ -44,7 +44,7 @@ public class BrandServiceTests {
 	public void testCheckUniqueInEditModeReturnDuplicate() {
 		Integer id = 8;
 		String name = "Canon";
-		Brand brand = new Brand(id, name);
+		Brand brand = new Brand(id, name, "default-logo.png");
 		
 		Mockito.when(repo.findByName(name)).thenReturn(brand);
 		String result = service.checkUnique(2, "Canon");
@@ -55,7 +55,7 @@ public class BrandServiceTests {
 	public void testCheckUniqueInEditModeReturnOk() {
 		Integer id = 1;
 		String name = "Acer";
-		Brand brand = new Brand(id, name);
+		Brand brand = new Brand(id, name, "default-logo.png");
 		
 		Mockito.when(repo.findByName(name)).thenReturn(brand);
 		String result = service.checkUnique(id, "test");
