@@ -8,6 +8,7 @@
 	
 		<title>[[${pageTitle}]]</title>
 		<link rel="stylesheet" type="text/css" th:href="@{/css/form.css}" />
+		<link rel="stylesheet" th:href="@{/richText/richtext.min.css}"> </link>
 		<div th:replace="fragments/cssLinks :: cssLinks"></div>
 	</head>
 	
@@ -45,20 +46,27 @@
 						    <a class="nav-link" data-toggle="tab" href="#details" role="tab" 
 						    	aria-controls="Details" aria-selected="false">Details</a>
 						  </li>
+						  <li class="nav-item">
+						    <a class="nav-link" data-toggle="tab" href="#shipping" role="tab" 
+						    	aria-controls="Details" aria-selected="false">Shipping</a>
+						  </li>
 						</ul>
 						
 						<div class="tab-content">
 							<div class="tab-pane active p-3" id="overview" role="tabpanel" aria-labelledby="overview-tab">
 								<div th:replace="products/product_overview :: content"></div>
 							</div>
-							<div class="tab-pane" id="description" role="tabpanel" aria-labelledby="description-tab">
-								Description
+							<div class="tab-pane p-3" id="description" role="tabpanel" aria-labelledby="description-tab">
+								<div th:replace="products/product_description :: content"></div>
 							</div>
-							<div class="tab-pane" id="images" role="tabpanel" aria-labelledby="images-tab">
+							<div class="tab-pane p-3" id="images" role="tabpanel" aria-labelledby="images-tab">
 								Images
-							</div>
-							<div class="tab-pane" id="details" role="tabpanel" aria-labelledby="details-tab">
+							</div>						
+							<div class="tab-pane p-3" id="details" role="tabpanel" aria-labelledby="details-tab">
 								Details
+							</div>
+							<div class="tab-pane p-3" id="shipping" role="tabpanel" aria-labelledby="shipping-tab">
+								<div th:replace="products/product_shipping :: content"></div>
 							</div>
 						</div>
 					</div>
@@ -77,6 +85,7 @@
 		<!-- js -->
 		<div th:replace="fragments/jsScripts :: jsScripts"></div>
 		<script th:src="@{/js/createEdit_form.js}"></script>
+		<script th:src="@{/richText/jquery.richtext.min.js}"></script>
 	</body>
 	
 	<script type="text/javascript">		
@@ -86,6 +95,9 @@
 		dropdownCategories = $("#category");
 		
 		$(document).ready(function(){
+			$("#shortDescription").richText();
+			$("#fullDescription").richText();
+			
 			dropdownBrands.change(function(){
 				dropdownCategories.empty();
 				getCategories();

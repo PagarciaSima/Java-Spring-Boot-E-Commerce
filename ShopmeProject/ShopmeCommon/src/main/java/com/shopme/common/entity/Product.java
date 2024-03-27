@@ -135,6 +135,13 @@ public class Product {
 	public float getWidth() {
 		return width;
 	}
+	
+	public float getWeight() {
+		return weight;
+	}
+	public void setWeight(float weight) {
+		this.weight = weight;
+	}
 	public void setWidth(float width) {
 		this.width = width;
 	}
