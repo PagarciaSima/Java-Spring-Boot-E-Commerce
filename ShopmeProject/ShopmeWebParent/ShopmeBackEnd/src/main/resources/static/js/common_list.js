@@ -12,5 +12,4 @@ function showDeleteConfirmModal(link, entityName){
  $('#submitSearch').click(function(event) {
 	event.preventDefault();
     $('#searchForm').submit(); 
-    
 });
