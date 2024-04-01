@@ -16,7 +16,15 @@
 		<div class="container-fluid">
 			<!-- HEADER MENU -->
 			<div th:replace="fragments/navigation :: header_menu"></div>
-			<h1>Welcome to Shopme eCommerce</h1>
+			<div><h1>Shopping by categories</h1></div>
+			
+			<div class="row">
+				<div class="col" th:each="cat: ${listCategories}">
+					<div><img th:src="@{${cat.imagePath}}"/></div>
+					<div>[[${cat.name}]]]</div>
+				</div>
+			</div>
+			
 			<!-- FOOTER MENU -->
 			<div th:replace="fragments/navigation :: footer_menu"></div>
 			<!-- FOOTER -->

@@ -31,4 +31,18 @@ public class ProductService {
 		product.setUpdatedTime(new Date());
 		return repo.save(product);
 	}
+	
+	public String checkUnique(Integer id, String name) {
+		boolean isCreatingNew = (id == null || id == 0);
+		Product productByName = repo.findByName(name);
+		
+		if(isCreatingNew) {
+			if(productByName != null)
+				return "Duplicated";
+		} else {
+			if(productByName != null && productByName.getId() != id)
+				return "Duplicated";
+		}
+		return "OK";
+	}
 }

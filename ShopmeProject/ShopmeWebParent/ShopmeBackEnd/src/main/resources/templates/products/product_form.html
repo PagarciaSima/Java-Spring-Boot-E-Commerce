@@ -26,7 +26,9 @@
 	
 			<!-- REGISTER FORM -->
 			<div class="mb-3">
-				<form th:action="@{/products/save}" method="post" th:object="${product}" class="product-form">
+				<form th:action="@{/products/save}" method="post" th:object="${product}" class="product-form"
+					onsubmit="return checkUnique(this)"
+				>
 					<input type="hidden" th:field="*{id}"/>
 					<div>
 						<ul class="nav nav-tabs" id="myTab" role="tablist">
@@ -115,5 +117,30 @@
 			});
 			
 		}
+		
+		function checkUnique(form){
+			productId = $("#id").val();
+			productName = $("#name").val();
+			csrfValue = $("input[name='_csrf']").val();
+
+			url = "[[@{/products/check_unique}]]";
+			params = {id: productId, name: productName, _csrf: csrfValue};
+			
+			$.post(url, params, function(response){
+				if(response == "OK"){
+					form.submit();
+				}else if (response == "Duplicated"){
+					showModalDialog("Warning", "There is another product registered with the name '" 
+						+ productName + "'", "warning");
+				}else{
+					showModalDialog("Error", "Error, unknown response from server", "error");
+				}	
+			}).fail(function(){
+					showModalDialog("Error", "Error, Could not connect to the server", "error");
+			});
+			return false;
+		}
+		
+
 	</script>
 </html>

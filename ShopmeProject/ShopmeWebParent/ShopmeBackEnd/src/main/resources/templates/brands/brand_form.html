@@ -136,7 +136,6 @@
 			params = {id: brandId, name: brandName, _csrf: csrfValue};
 			
 			$.post(url, params, function(response){
-				console.log("post")
 				if(response == "OK"){
 					form.submit();
 				}else if (response == "Duplicated"){
@@ -146,7 +145,6 @@
 					showModalDialog("Error", "Error, unknown response from server", "error");
 				}	
 			}).fail(function(){
-				console.log("fail")
 					showModalDialog("Error", "Error, Could not connect to the server", "error");
 			});
 			return false;
