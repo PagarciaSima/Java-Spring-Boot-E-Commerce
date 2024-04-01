@@ -1,0 +1,26 @@
+html, body {
+   height: 1050px;
+   padding-bottom: 100px;
+}
+
+.footer {
+   	position: fixed;
+   	bottom: 0;
+   	left: 0;
+    width: 100%;
+    height: 50px;  
+    z-index: 1;          
+}
+
+.container-fluid{margin-top: 100px;}
+
+.login-form{
+	max-width: 350px;
+	margin: 0 auto;
+}
+
+.form-control:focus {
+	z-index: 2;
+    outline: 0;
+    box-shadow: 0 0 0 0.2rem rgb(37 201 34 / 25%);
+}

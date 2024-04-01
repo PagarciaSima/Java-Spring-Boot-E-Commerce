@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+
+<html
+	xmlns:th="http://www.thymeleaf.org"
+>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
+
+		<title>Home - Shopme</title>	
+		<div th:replace="fragments/cssLinks :: cssLinks"></div>
+	</head>
+	
+	<body>
+		<div class="container-fluid" id="page-container">
+
+			<!-- HEADER MENU -->
+			<nav th:replace="fragments/navigation :: header_menu"></nav>
+			
+			<div class="text-center alert alert-danger mt-5">
+				<h2>Sorry, you don't have permissions to access the requested page (403)
+					<i class="ml-2 fa-solid fa-circle-exclamation"></i>
+				</h2>
+			</div>
+			
+			<!-- HEADER MENU -->
+			<nav th:replace="fragments/navigation :: footer_menu"></nav>
+			
+			<!-- FOOTER -->
+			<footer th:replace="fragments/footer :: footer"></footer>
+		</div>	
+		<!-- js -->
+		<div th:replace="fragments/jsScripts :: jsScripts"></div><!-- js -->
+	</body>
+</html>
