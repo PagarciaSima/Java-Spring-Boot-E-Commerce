@@ -5,10 +5,12 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.shopme.common.entity.Product;
 
 @Service
+@Transactional
 public class ProductService {
 	
 	@Autowired
@@ -44,5 +46,9 @@ public class ProductService {
 				return "Duplicated";
 		}
 		return "OK";
+	}
+	
+	public void updateProductEnabledStatus(Integer id, boolean enabled) {
+		repo.updateEnabledStatus(id, enabled);
 	}
 }
