@@ -104,7 +104,9 @@
 		<script th:src="@{/js/createEdit_form.js}"></script>
 	</body>
 	<script type="text/javascript">		
+		MAX_FILE_SIZE = 102400;
 		moduleUrl = "[[@{/brands}]]";
+		
 		$(document).ready(function () {	
 			dropdownCategories = $("#categories");
 			divChosenCategories = $("#chosenCategories");

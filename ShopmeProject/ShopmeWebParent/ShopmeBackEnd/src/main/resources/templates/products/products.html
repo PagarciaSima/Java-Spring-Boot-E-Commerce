@@ -43,7 +43,7 @@
 			<!-- SEARCH FORM / BAR -->
 			<div th:replace="fragments/searchForm :: search_form('/products/page/1')"></div>
 			
-			<!-- BRANDS TABLE MEDIUM / LARGE SCREEN -->
+			<!-- PRODUCTS TABLE MEDIUM / LARGE SCREEN -->
 			<table class="full-details table table-bordered table-striped table-hover table-responsive-xl mt-5">
 				<thead class="thead-dark">
 					<tr>
@@ -60,7 +60,7 @@
 					<tr th:each="product, productStatus : ${listProducts}">
 						<td class="show-hide">[[${product.id}]]</td>
 						<td>
-							imagen
+							<img th:src="@{${product.mainImagePath}}" class="img-fluid"/>
 						</td>
 						<td>[[${product.name}]]</td>
 						<td>[[${product.brand.name}]]</td>

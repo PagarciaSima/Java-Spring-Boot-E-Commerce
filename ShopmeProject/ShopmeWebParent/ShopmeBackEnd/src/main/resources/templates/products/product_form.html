@@ -27,7 +27,7 @@
 			<!-- REGISTER FORM -->
 			<div class="mb-3">
 				<form th:action="@{/products/save}" method="post" th:object="${product}" class="product-form"
-					onsubmit="return checkUnique(this)"
+					onsubmit="return checkUnique(this)" enctype="multipart/form-data"
 				>
 					<input type="hidden" th:field="*{id}"/>
 					<div>
@@ -62,7 +62,7 @@
 								<div th:replace="products/product_description :: content"></div>
 							</div>
 							<div class="tab-pane p-3" id="images" role="tabpanel" aria-labelledby="images-tab">
-								Images
+								<div th:replace="products/product_images :: content"></div>
 							</div>						
 							<div class="tab-pane p-3" id="details" role="tabpanel" aria-labelledby="details-tab">
 								Details
@@ -91,10 +91,13 @@
 	</body>
 	
 	<script type="text/javascript">		
+		MAX_FILE_SIZE = 502400;
+		
 		moduleUrl = "[[@{/products}]]";
 		brandModuleUrl = "[[@{/brands}]]";
 		dropdownBrands = $("#brand");
 		dropdownCategories = $("#category");
+		defaultImageThumbnailSrc = "[[@{/images/image-thumbnail.png}]]"
 		
 		$(document).ready(function(){
 			$("#shortDescription").richText();

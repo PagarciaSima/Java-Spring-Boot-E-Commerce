@@ -135,8 +135,9 @@
 		<!-- js -->
 		<div th:replace="fragments/jsScripts :: jsScripts"></div>
 		<script type="text/javascript">
-			
+			MAX_FILE_SIZE = 102400;
 			moduleUrl = "[[@{/users}]]";
+			
 			$(document).ready(function () {	
 			   	toggleIcon($('#checkEnable').is(':checked'), $('#checkEnable'));
 			

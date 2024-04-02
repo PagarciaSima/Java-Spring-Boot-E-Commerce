@@ -1,16 +1,21 @@
 package com.shopme.admin.product.controller;
 
+import java.io.IOException;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.shopme.admin.FileUploadUtil;
 import com.shopme.admin.brand.BrandService;
 import com.shopme.admin.product.ProductNotFoundException;
 import com.shopme.admin.product.ProductService;
@@ -50,17 +55,64 @@ public class ProductController {
 	
 	// Handler method to save new Product
 	@PostMapping("/products/save")
-	public String saveProduct(@ModelAttribute Product product,
-			RedirectAttributes redirectAttributes) {
+	public String saveProduct(
+			@ModelAttribute Product product,
+			@RequestParam("fileImage") MultipartFile mainImageMultipartFile,
+			@RequestParam("extraImage") MultipartFile[] extraImageMultiparts,
+			RedirectAttributes redirectAttributes
+	) throws IOException {
 		String message;
 		if (product.getId() == null) {
 	        message = "The new product has been created.";
 	    } else {
 	        message = "Product information has been updated.";
 	    }
-		productService.save(product);
+		setMainImageName(mainImageMultipartFile, product);
+		setExtraImageNames(extraImageMultiparts, product);	
+		
+		Product savedProduct = productService.save(product);
+		saveUploadedImages(mainImageMultipartFile, extraImageMultiparts, savedProduct);
+		
 		redirectAttributes.addFlashAttribute("message", message);
 		return "redirect:/products";
+	}
+	
+	private void saveUploadedImages(MultipartFile mainImageMultipartFile, MultipartFile[] extraImageMultiparts,
+			Product savedProduct) throws IOException {
+		if(!mainImageMultipartFile.isEmpty()) {
+			String fileName = StringUtils.cleanPath(mainImageMultipartFile.getOriginalFilename());
+			String uploadDir = "product-images/" + savedProduct.getId();
+			FileUploadUtil.cleanDir(uploadDir);
+			FileUploadUtil.saveFile(uploadDir, fileName, mainImageMultipartFile);
+		}
+		if(extraImageMultiparts.length > 0) {
+			for(MultipartFile multipartFile : extraImageMultiparts) {
+				String uploadDir = "product-images/" + savedProduct.getId() + "/extras";
+				if(multipartFile.isEmpty()) {
+					continue;
+				}
+				String fileName = StringUtils.cleanPath(multipartFile.getOriginalFilename());
+				FileUploadUtil.saveFile(uploadDir, fileName, multipartFile);
+			}
+		}
+	}
+
+	private void setExtraImageNames(MultipartFile[] extraImageMultiparts, Product product) {
+		if(extraImageMultiparts.length > 0) {
+			for(MultipartFile multipartFile : extraImageMultiparts) {
+				if(!multipartFile.isEmpty()) {
+					String fileName = StringUtils.cleanPath(multipartFile.getOriginalFilename());
+					product.addExtraImage(fileName);
+				}
+			}
+		}	
+	}
+
+	private void setMainImageName(MultipartFile mainImageMultipartFile, Product product) {
+		if(!mainImageMultipartFile.isEmpty()) {
+			String fileName = StringUtils.cleanPath(mainImageMultipartFile.getOriginalFilename());
+			product.setMainImage(fileName);
+		}
 	}
 	
 	// Handler method to set enabled status
@@ -85,6 +137,11 @@ public class ProductController {
 	) {
 		try {
 			productService.delete(id);
+			String productExtraImagesDir = "product-images/" + id + "/extras";
+			String productImagesDir = "product-images/" + id ;
+			FileUploadUtil.removeDir(productExtraImagesDir);
+			FileUploadUtil.removeDir(productImagesDir);
+			
 			redirectAttributes.addFlashAttribute("message", 
 					"The product ID " + id + " has been deleted successfully");
 		}catch(ProductNotFoundException ex) {
