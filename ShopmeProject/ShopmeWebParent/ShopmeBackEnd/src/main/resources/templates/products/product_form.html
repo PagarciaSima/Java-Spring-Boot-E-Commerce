@@ -65,7 +65,12 @@
 								<div th:replace="products/product_images :: content"></div>
 							</div>						
 							<div class="tab-pane p-3" id="details" role="tabpanel" aria-labelledby="details-tab">
-								Details
+								<div th:replace="products/product_details :: content"></div>
+								<div class="ml-3 mt-3">
+									<input type="button" class="btn btn-secondary" value="Add More Detail" 
+										onclick="addNextDetailSection()"
+									/>
+								</div>
 							</div>
 							<div class="tab-pane p-3 text-center" id="shipping" role="tabpanel" aria-labelledby="shipping-tab">
 								<div th:replace="products/product_shipping :: content"></div>
@@ -142,6 +147,36 @@
 					showModalDialog("Error", "Error, Could not connect to the server", "error");
 			});
 			return false;
+		}
+		
+		function addNextDetailSection(){
+			
+			allDivDetails = $("[id^='divDetail']")
+			divDetailsCount = allDivDetails.length;
+			
+			htmlDetailSection = `
+				<div class="form-inline" id="divDetail${divDetailsCount}">
+					<label class="font-weight-bold m-3">Name:</label>
+					<input type="text" class="form-control w-25" name="detailNames" maxlength="255" />
+					<label class="font-weight-bold m-3">Value:</label>
+					<input type="text" class="form-control w-25" name="detailValues" maxlength="255" />
+				</div>
+			`;
+			
+			$("#divProductDetails").append(htmlDetailSection);
+			
+			previousDivDetailSection = allDivDetails.last();
+			previousDivDetailId = previousDivDetailSection.attr("id");
+			htmlLinkRemove = 
+			`<a class="btn fas fa-times-circle fa-2x icon-green" title="Remove this detail"
+				href="javascript:removeDetailSectionById('${previousDivDetailId}')"
+			></a>`;
+			previousDivDetailSection.append(htmlLinkRemove)
+			$("input[name='detailNames'").last().focus();
+		}
+		
+		function removeDetailSectionById(id){
+			$('#' + id).remove();
 		}
 		
 
