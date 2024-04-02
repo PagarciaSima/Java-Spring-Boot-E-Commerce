@@ -212,10 +212,12 @@ public class Product {
 			return "/images/image-thumbnail.png";
 		return "/product-images/" + this.id + "/" + this.mainImage;
 	}
+	
 	@Override
 	public String toString() {
 		return "Product [id=" + id + ", name=" + name + "]";
 	}
+	
 	public void addDetail(String name, String value) {
 		this.details.add(new ProductDetail(name, value, this));
 		
