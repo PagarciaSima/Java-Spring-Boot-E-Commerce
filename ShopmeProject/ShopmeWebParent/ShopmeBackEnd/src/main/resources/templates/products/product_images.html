@@ -9,19 +9,39 @@
 	<!-- PRODUCT IMAGES FRAGMENT -->
 	<div th:fragment="content" th:remove="tag">
 		<div class="row" id="divProductImages">
+			
+			<!-- MAIN IMAGE -->
 			<div class="col border m-3 p-3">
-				<div><label class="font-weight-bold">Main image:</label></div>
+				<div><label><strong>Main image:</strong> [[${product.mainImage}]]</label></div>
 				<div class="my-3">
 					<img id="thumbnail" alt="Main image preview" class="img-fluid"
 						th:src="@{${product.mainImagePath}}" style="width: auto;"
 					/>
 				</div>
 				<div>
-					<input type="file" id="fileImage" name="fileImage" required 
+					<input type="file" id="fileImage" name="fileImage" th:required = "${product.mainImage == null}"
 						accept="image/png, image/jpeg"
 					/>
 				</div>
+				<input type="hidden" th:field="*{mainImage}" />
 			</div>
+			
+			<!-- EXTRA IMAGES -->
+			<th:block th:each="productImage : ${product.images}">
+				<div class="col border m-3 p-3" id="divExtraImage0">
+					<div id="extraImageHeader0"><label class="font-weight-bold">Extra image #1:</label></div>
+					<div class="my-3">
+						<img id="extraThumbnail10" alt="Extra image #1 preview" class="img-fluid"
+							th:src="@{${productImage.imagePath}}" style="width: auto;"
+						/>
+					</div>
+					<div>
+						<input type="file"name="extraImage" 
+							accept="image/png, image/jpeg"
+						/>
+					</div>
+				</div>
+			</th:block>
 			
 			<div class="col border m-3 p-3" id="divExtraImage0">
 				<div id="extraImageHeader0"><label class="font-weight-bold">Extra image #1:</label></div>
@@ -36,6 +56,7 @@
 					/>
 				</div>
 			</div>
+			
 		</div>
 	</div>
 </body>

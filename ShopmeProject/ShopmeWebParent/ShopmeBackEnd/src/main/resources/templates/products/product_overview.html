@@ -35,9 +35,18 @@
 		<div class="form-group row">
 			<label for="category" class="col-sm-2 col-form-label"><strong>Category:</strong></label>
 			<div class="col-sm-10">
-				<select th:field="*{category}" class="form-control" required>
-				
-				</select>
+				<th:block th:if="${product.category != null }">
+					<select th:field="*{category}" class="form-control" required>
+						<th:block th:each="cat : ${product.brand.categories}">
+							<option th:value="${cat.id}">[[${cat.name}]]</option>
+						</th:block>
+					</select>
+				</th:block>
+				<th:block th:if="${product.category == null }">
+					<select th:field="*{category}" class="form-control" required>
+					
+					</select>
+				</th:block>
 			</div>
 		</div>	
 		<div class="form-group row">
