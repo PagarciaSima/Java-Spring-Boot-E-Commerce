@@ -30,6 +30,7 @@
 					onsubmit="return checkUnique(this)" enctype="multipart/form-data"
 				>
 					<input type="hidden" th:field="*{id}"/>
+					<input th:if="${product.category != null}" type="hidden" id="categoryId" th:value="${product.category.id}"/>
 					<div>
 						<ul class="nav nav-tabs" id="myTab" role="tablist">
 						  <li class="nav-item">
@@ -112,8 +113,19 @@
 				dropdownCategories.empty();
 				getCategories();
 			});
-			getCategories();
+			getCategoriesForNewForm();
 		});
+		
+		function getCategoriesForNewForm(){
+			catIdField = $("#categoryId");
+			editMode = false;
+			if (catIdField.length){
+				editMode = true;
+			}
+			if(!editMode){
+				getCategories();
+			}
+		}
 		
 		function getCategories(){
 			brandId = dropdownBrands.val()
