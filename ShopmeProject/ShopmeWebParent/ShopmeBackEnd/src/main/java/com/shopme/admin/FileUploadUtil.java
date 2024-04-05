@@ -14,7 +14,7 @@ import com.shopme.admin.user.controller.UserController;
 
 public class FileUploadUtil {
 	
-	private final static Logger log = LoggerFactory.getLogger(UserController.class);
+	private final static Logger LOG = LoggerFactory.getLogger(UserController.class);
 
 	public static void saveFile(String uploadDir, String fileName, MultipartFile multipartFile) throws IOException {
 		Path uploadPath = Paths.get(uploadDir);
@@ -34,7 +34,7 @@ public class FileUploadUtil {
 		try {
 			Files.delete(Paths.get(dir));
 		}catch (IOException e) {
-			log.error("Could not remove directory: " + dir);
+			LOG.error("Could not remove directory: " + dir);
 		}
 	}
 
@@ -46,13 +46,13 @@ public class FileUploadUtil {
 					try {
 						Files.delete(file);
 					}catch (IOException e) {
-						log.error("Could not delete file: " + file);
+						LOG.error("Could not delete file: " + file);
 					}
 				}
 			});
 			
 		}catch(IOException ex) {
-			log.error("Could not list directory: " + dirPath);
+			LOG.error("Could not list directory: " + dirPath);
 		}
 	}
 }

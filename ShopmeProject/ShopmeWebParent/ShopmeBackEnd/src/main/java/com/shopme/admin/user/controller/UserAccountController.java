@@ -28,7 +28,7 @@ public class UserAccountController {
 	@Autowired
 	private UserService service;
 	
-	private static final Logger log = LoggerFactory.getLogger(UserAccountController.class);
+	private static final Logger LOG = LoggerFactory.getLogger(UserAccountController.class);
 	
 	// Handler method to show account form
 	@GetMapping("/account")
@@ -52,7 +52,7 @@ public class UserAccountController {
 			String fileName = StringUtils.cleanPath(multipartFile.getOriginalFilename());
 			user.setPhotos(fileName);
 			User savedUser = service.updateAccount(user);
-			log.info("New user saved.");
+			LOG.info("New user saved.");
 			String uploadDir = "user-photos/" + savedUser.getId();
 			// Delete any previous user image before saving another one
 			FileUploadUtil.removeDir(uploadDir);

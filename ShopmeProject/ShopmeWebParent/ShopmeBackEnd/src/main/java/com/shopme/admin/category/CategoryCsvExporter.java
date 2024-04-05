@@ -16,7 +16,7 @@ import com.shopme.common.entity.Category;
 
 public class CategoryCsvExporter extends AbstractExporter{
 	
-	private static final Logger log = LoggerFactory.getLogger(CategoryCsvExporter.class);
+	private static final Logger LOG = LoggerFactory.getLogger(CategoryCsvExporter.class);
 	
 	public void export(List<Category> listCategories, HttpServletResponse response) throws IOException {
 		super.setResponseHeader(response,"text/csv" , ".csv", "Categories_");
@@ -32,7 +32,7 @@ public class CategoryCsvExporter extends AbstractExporter{
 	            try {
 					csvWriter.write(category, fieldMapping);
 				} catch (IOException e) {
-					log.error("Error while mapping csv fields");
+					LOG.error("Error while mapping csv fields");
 				}
 	        });
 		csvWriter.close();

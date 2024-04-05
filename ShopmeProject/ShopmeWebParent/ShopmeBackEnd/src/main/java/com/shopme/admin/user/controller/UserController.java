@@ -32,7 +32,7 @@ import com.shopme.common.entity.User;
 @Controller
 public class UserController {
 	
-	private final static Logger log = LoggerFactory.getLogger(UserController.class);
+	private final static Logger LOG = LoggerFactory.getLogger(UserController.class);
 	
 	@Autowired
 	private UserService service;
@@ -103,7 +103,7 @@ public class UserController {
 			String fileName = StringUtils.cleanPath(multipartFile.getOriginalFilename());
 			user.setPhotos(fileName);
 			User savedUser = service.save(user);
-			log.info("New user saved.");
+			LOG.info("New user saved.");
 			String uploadDir = "user-photos/" + savedUser.getId();
 			// Delete any previous user image before saving another one
 			FileUploadUtil.removeDir(uploadDir);
