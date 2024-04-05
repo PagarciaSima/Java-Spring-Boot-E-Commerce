@@ -8,7 +8,23 @@
 <body>
 	<!-- PRODUCT DETAILS FRAGMENT -->
 	<div th:fragment="content" id="divProductDetails">
-		<div class="form-inline" id="divDetail0">
+		<th:block th:each="detail, status : ${product.details}">
+			<div class="form-inline" th:id="'divDetail' + ${status.index}">
+				<label class="font-weight-bold m-3">Name:</label>
+				<input type="text" class="form-control w-25" name="detailNames" maxlength="255" 
+					th:value="${detail.name}"
+				/>
+				<label class="font-weight-bold m-3">Value:</label>
+				<input type="text" class="form-control w-25" name="detailValues" maxlength="255" 
+					th:value="${detail.value}"
+				/>
+				<a name="linkRemoveDetail" class="btn fas fa-times-circle fa-2x icon-green float-right" 
+						title="Remove this image">
+				</a>
+			</div>
+		</th:block>
+		
+		<div class="form-inline" th:id="'divDetail' + ${#lists.size(product.details)}">
 			<label class="font-weight-bold m-3">Name:</label>
 			<input type="text" class="form-control w-25" name="detailNames" maxlength="255" />
 			<label class="font-weight-bold m-3">Value:</label>

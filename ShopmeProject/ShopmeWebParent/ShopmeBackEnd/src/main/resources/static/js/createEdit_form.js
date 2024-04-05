@@ -26,6 +26,13 @@ $(document).ready(function () {
 		})
 	});
 	
+	$("a[name='linkRemoveDetail']").each(function(index){
+		$(this).click(function(){
+			removeDetailSectionByIndex(index);
+		})
+	});
+	
+	
 });
 
 function checkFileSize(fileInput){
@@ -88,4 +95,8 @@ function addNextExtraImageSection(index){
 
 function removeExtraImage(index){
 	$("#divExtraImage" + index).remove();
+}
+
+function removeDetailSectionByIndex(index){
+	$("#divDetail" + index).remove();
 }
