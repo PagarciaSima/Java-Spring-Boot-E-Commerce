@@ -20,6 +20,12 @@ $(document).ready(function () {
 		});
 	});
 	
+	$("a[name='linkRemoveExtraImage']").each(function(index){
+		$(this).click(function(){
+			removeExtraImage(index);
+		})
+	});
+	
 });
 
 function checkFileSize(fileInput){
@@ -47,7 +53,7 @@ function showExtraImageThumbnail (fileInput, index) {
 	var file = fileInput.files[0];
 	var reader = new FileReader();
 	reader.onload = function (e){
-		$("#extraThumbnail1" + index).attr("src", e.target.result)
+		$("#extraThumbnail" + index).attr("src", e.target.result)
 	}
 	reader.readAsDataURL(file);
 	if(index >= extraImagesCount - 1){
@@ -60,7 +66,7 @@ function addNextExtraImageSection(index){
 			`<div class="col border m-3 p-3" id="divExtraImage${index}">
 				<div id="extraImageHeader${index}"><label class="font-weight-bold">Extra image #${index + 1}:</label></div>
 				<div class="my-3">
-					<img id="extraThumbnail1${index}" alt="Extra image #${index + 1} preview" class="img-fluid"
+					<img id="extraThumbnail${index}" alt="Extra image #${index + 1} preview" class="img-fluid"
 						src="${defaultImageThumbnailSrc}" style="width: auto;"
 					/>
 				</div>

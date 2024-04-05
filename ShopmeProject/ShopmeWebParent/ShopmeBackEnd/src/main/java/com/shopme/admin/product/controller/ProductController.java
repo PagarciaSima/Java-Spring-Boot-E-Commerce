@@ -45,10 +45,11 @@ public class ProductController {
 		Product product = new Product();
 		product.setEnabled(true);
 		product.setInStock(true);
-		
+
 		model.addAttribute("product", product);
 		model.addAttribute("listBrands", listBrands);
 		model.addAttribute("pageTitle", "Create New Product");
+		model.addAttribute("numberOfExistingExtraImages", 0);
 
 		return "products/product_form";
 	}
@@ -173,10 +174,13 @@ public class ProductController {
 		try {
 			Product product = productService.get(id);
 			List<Brand> listBrands = brandService.listAll();
+			Integer numberOfExistingExtraImages = product.getImages().size();
 			
 			model.addAttribute("product", product);
 			model.addAttribute("pageTitle", "Edit Product (ID: " + id + ")");
 			model.addAttribute("listBrands", listBrands);
+			model.addAttribute("numberOfExistingExtraImages", numberOfExistingExtraImages);
+			
 			return "/products/product_form";
 		} catch (ProductNotFoundException e) {
 			redirectAttributes.addFlashAttribute("message", e.getMessage());
