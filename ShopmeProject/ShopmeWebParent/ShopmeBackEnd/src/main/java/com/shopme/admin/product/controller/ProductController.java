@@ -96,6 +96,75 @@ public class ProductController {
 		return "redirect:/products";
 	}
 	
+	// Handler method to set enabled status
+	@GetMapping("/products/{id}/enabled/{status}")
+	public String updateCategoryEnabledStatus(
+		@PathVariable("id") Integer id, 
+		@PathVariable ("status") boolean enabled,
+		RedirectAttributes redirectAttributes
+	) {
+		productService.updateProductEnabledStatus(id, enabled);
+		String status = enabled ? "enabled" : "disabled";
+		String message = "The Product ID " + id + " has been " + status;
+		redirectAttributes.addFlashAttribute("message", message);
+		return "redirect:/products";
+	}
+	
+	// Handler method to delete products
+	@GetMapping("/products/delete/{id}")
+	public String deleteProduct(@PathVariable(name = "id") Integer id,
+			Model model,
+			RedirectAttributes redirectAttributes
+	) {
+		try {
+			productService.delete(id);
+			String productExtraImagesDir = "product-images/" + id + "/extras";
+			String productImagesDir = "product-images/" + id ;
+			FileUploadUtil.removeDir(productExtraImagesDir);
+			FileUploadUtil.removeDir(productImagesDir);
+			
+			redirectAttributes.addFlashAttribute("message", 
+					"The product ID " + id + " has been deleted successfully");
+		}catch(ProductNotFoundException ex) {
+			redirectAttributes.addFlashAttribute("message", ex.getMessage());
+		}
+		
+		return "redirect:/products";
+	}
+	
+	// Handler method to get edit form
+	@GetMapping("/products/edit/{id}")
+	public String editProduct(@PathVariable("id") Integer id, Model model, RedirectAttributes redirectAttributes) {
+		try {
+			Product product = productService.get(id);
+			List<Brand> listBrands = brandService.listAll();
+			Integer numberOfExistingExtraImages = product.getImages().size();
+			
+			model.addAttribute("product", product);
+			model.addAttribute("pageTitle", "Edit Product (ID: " + id + ")");
+			model.addAttribute("listBrands", listBrands);
+			model.addAttribute("numberOfExistingExtraImages", numberOfExistingExtraImages);
+			
+			return "/products/product_form";
+		} catch (ProductNotFoundException e) {
+			redirectAttributes.addFlashAttribute("message", e.getMessage());
+			return "redirect/:products";
+		}
+	}
+	
+	// Handler method to access product details
+	@GetMapping("/products/detail/{id}")
+	public String viewProductDetails(@PathVariable("id") Integer id, Model model, RedirectAttributes redirectAttributes) {
+		try {
+			Product product = productService.get(id);			
+			model.addAttribute("product", product);
+			return "/products/product_detail_modal";
+		} catch (ProductNotFoundException e) {
+			redirectAttributes.addFlashAttribute("message", e.getMessage());
+			return "redirect/:products";
+		}
+	}
+	
 	private void deleteExtraImagesWereRemovedOnForm(Product product) {
 		String extraImageDir = "product-images/" + product.getId() + "/extras";
 		
@@ -186,62 +255,6 @@ public class ProductController {
 		if(!mainImageMultipartFile.isEmpty()) {
 			String fileName = StringUtils.cleanPath(mainImageMultipartFile.getOriginalFilename());
 			product.setMainImage(fileName);
-		}
-	}
-	
-	// Handler method to set enabled status
-	@GetMapping("/products/{id}/enabled/{status}")
-	public String updateCategoryEnabledStatus(
-		@PathVariable("id") Integer id, 
-		@PathVariable ("status") boolean enabled,
-		RedirectAttributes redirectAttributes
-	) {
-		productService.updateProductEnabledStatus(id, enabled);
-		String status = enabled ? "enabled" : "disabled";
-		String message = "The Product ID " + id + " has been " + status;
-		redirectAttributes.addFlashAttribute("message", message);
-		return "redirect:/products";
-	}
-	
-	// Handler method to delete products
-	@GetMapping("/products/delete/{id}")
-	public String deleteProduct(@PathVariable(name = "id") Integer id,
-			Model model,
-			RedirectAttributes redirectAttributes
-	) {
-		try {
-			productService.delete(id);
-			String productExtraImagesDir = "product-images/" + id + "/extras";
-			String productImagesDir = "product-images/" + id ;
-			FileUploadUtil.removeDir(productExtraImagesDir);
-			FileUploadUtil.removeDir(productImagesDir);
-			
-			redirectAttributes.addFlashAttribute("message", 
-					"The product ID " + id + " has been deleted successfully");
-		}catch(ProductNotFoundException ex) {
-			redirectAttributes.addFlashAttribute("message", ex.getMessage());
-		}
-		
-		return "redirect:/products";
-	}
-	
-	// Handler method to get edit form
-	@GetMapping("/products/edit/{id}")
-	public String editProduct(@PathVariable("id") Integer id, Model model, RedirectAttributes redirectAttributes) {
-		try {
-			Product product = productService.get(id);
-			List<Brand> listBrands = brandService.listAll();
-			Integer numberOfExistingExtraImages = product.getImages().size();
-			
-			model.addAttribute("product", product);
-			model.addAttribute("pageTitle", "Edit Product (ID: " + id + ")");
-			model.addAttribute("listBrands", listBrands);
-			model.addAttribute("numberOfExistingExtraImages", numberOfExistingExtraImages);
-			
-			return "/products/product_form";
-		} catch (ProductNotFoundException e) {
-			redirectAttributes.addFlashAttribute("message", e.getMessage());
-			return "redirect/:products";
 		}
 	}
 }

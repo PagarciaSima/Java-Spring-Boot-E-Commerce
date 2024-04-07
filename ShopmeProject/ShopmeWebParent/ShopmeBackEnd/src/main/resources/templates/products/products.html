@@ -62,7 +62,11 @@
 						<td>
 							<img th:src="@{${product.mainImagePath}}" class="img-fluid"/>
 						</td>
-						<td>[[${product.name}]]</td>
+						<td>
+							<a th:href="@{'/products/detail/' + ${product.id}}" title="View details of this product"
+								class="link-detail"
+							>[[${product.name}]]</a>
+						</td>
 						<td>[[${product.brand.name}]]</td>
 						<td>[[${product.category.name}]]</td>
 						<td>
@@ -70,7 +74,7 @@
 								+ ${product.id}, '')"/>
 						</td>
 						<td th:fragment="brands_actions(removeTag)" th:remove="${removeTag}">
-							<a class="fas fa-file-alt fa-2x icon-green" 
+							<a class="fas fa-file-alt fa-2x icon-green link-detail" 
 								 th:href="@{'/products/detail/' + ${product.id}}" title="View details of this product"
 							></a>
 							<a class="fas fa-edit fa-2x icon-green ml-2" 
@@ -91,23 +95,32 @@
 		
 		<!-- CONFIRM DELETE CATEGORY MODAL -->
 		<div th:replace="fragments/modals :: confirm_modal"></div>
+		
+		<div class="modal" id="detailModal">
+			<div class="modal-dialog modal-xl">
+				<div class="modal-content">
+					
+				</div>
+			</div>
+		</div>
 		<!-- FOOTER -->
 		<footer th:replace="fragments/footer :: footer"></footer>
 		<!-- js -->
 		<div th:replace="fragments/jsScripts :: jsScripts"></div>
 		<script type="text/javascript" th:src="@{/js/common_list.js}"></script>
 		<script type="text/javascript">
-			moduleURL = "[[@{/brands}]]";
+			moduleURL = "[[@{/products}]]";
 			$(document).ready(function(e){
-				 $('#submitSearch').click(function(event) {
-					event.preventDefault();
-			        $('#searchForm').submit(); 
-			        
-			    });
 			    
 			    $(".link-delete").on("click", function(e){
 					e.preventDefault();
 					showDeleteConfirmModal($(this), 'Product');
+				});
+				
+				$(".link-detail").on("click", function(e){
+					e.preventDefault();
+					linkDetailURL = $(this).attr("href");
+					$("#detailModal").modal("show").find(".modal-content").load(linkDetailURL);
 				});
 			});
 		</script>
