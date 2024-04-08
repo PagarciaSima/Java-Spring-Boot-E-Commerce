@@ -41,8 +41,32 @@
 			</div>
 			
 			<!-- SEARCH FORM / BAR -->
-			<div th:replace="fragments/searchForm :: search_form('/products/page/1')"></div>
-			
+			<div class="d-flex align-items-center justify-content-center">
+				<form th:action="@{/products/page/1}" class="form-inline" id="searchForm">
+					<input type="hidden" name="sortField" th:value="${sortField}" />
+					<input type="hidden" name="sortDir" th:value="${sortDir}" />
+					
+					<label class="form-label font-weight-bold mr-2">Category:</label>
+					<select class="form-control" name="categoryId">
+						<option value="0">All Categories</option>
+						<th:block th:each="cat : ${listCategories}">
+							<option th:value="${cat.id}">
+								[[${cat.name}]]
+							</option>
+						</th:block>
+					</select>
+					<div class="form-group d-flex align-items-center ml-2">
+						<label for="searchField" class="form-label font-weight-bold mr-2">Filter:</label>
+						<input type="search" name="keyword" th:value="${keyword}" required class="form-control mr-2" id="searchField"/>
+						<a href="#" title="Search" id="submitSearch" class="link-submit">
+							<i class="fa-solid fa-magnifying-glass icon-green fa-2x"></i>
+						</a>
+						<a href="#" class="fa-solid fa-filter-circle-xmark icon-dark fa-2x" title="Clear Filters"
+							onclick="clearFilter()"
+						></a>
+					</div>				
+				</form>
+			</div>
 			<!-- PRODUCTS TABLE MEDIUM / LARGE SCREEN -->
 			<table class="full-details table table-bordered table-striped table-hover table-responsive-xl mt-5">
 				<thead class="thead-dark">
