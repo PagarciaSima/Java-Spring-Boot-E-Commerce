@@ -47,11 +47,11 @@
 			<table class="full-details table table-bordered table-striped table-hover table-responsive-xl mt-5">
 				<thead class="thead-dark">
 					<tr>
-						<th>ID</th>
+						<th th:replace="/fragments/column_link :: column_link('/products', 'id', 'ID', 'none')"></th>				
 						<th>Main Image</th>	
-						<th>Product Name</th>				
-						<th>Brand</th>				
-						<th>Category</th>
+						<th th:replace="/fragments/column_link :: column_link('/products', 'name', 'Product Name', 'none')"></th>				
+						<th th:replace="/fragments/column_link :: column_link('/products', 'brand', 'Brand', 'none')"></th>		
+						<th th:replace="/fragments/column_link :: column_link('/products', 'category', 'Category', 'none')"></th>
 						<th>Enabled</th>
 						<th>Actions</th>
 					</tr>
@@ -63,9 +63,9 @@
 							<img th:src="@{${product.mainImagePath}}" class="img-fluid"/>
 						</td>
 						<td>
-							<a th:href="@{'/products/detail/' + ${product.id}}" title="View details of this product"
+							<a th:href="@{'/products/detail/' + ${product.id}}" th:title="${product.name}"
 								class="link-detail"
-							>[[${product.name}]]</a>
+							>[[${product.shortName}]]</a>
 						</td>
 						<td>[[${product.brand.name}]]</td>
 						<td>[[${product.category.name}]]</td>
@@ -73,7 +73,7 @@
 							<div th:replace="fragments/entityStatus :: status(${product.enabled}, 'product', '/products/' 
 								+ ${product.id}, '')"/>
 						</td>
-						<td th:fragment="brands_actions(removeTag)" th:remove="${removeTag}">
+						<td class="d-flex align-items-center border-0">
 							<a class="fas fa-file-alt fa-2x icon-green link-detail" 
 								 th:href="@{'/products/detail/' + ${product.id}}" title="View details of this product"
 							></a>
@@ -90,7 +90,7 @@
 				</tbody>
 			</table>
 			<!-- PAGINATION -->
-			<!--<div th:replace="fragments/pagination :: pagination('/brands', 'brands')"></div>-->
+			<div th:replace="fragments/pagination :: pagination('/products', 'products')"></div>
 		</div>
 		
 		<!-- CONFIRM DELETE CATEGORY MODAL -->
