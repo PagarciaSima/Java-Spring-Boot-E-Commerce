@@ -28,8 +28,18 @@ public class Category {
 	@Column(length = 128, nullable = false)
 	private String image;
 	private boolean enabled;
+	@Column(name = "all_parent_ids", length = 256, nullable = true)
+	private String allParentIDs;
+	
 	@Transient
 	private boolean hasChildren;
+	
+	@OneToOne
+	@JoinColumn(name = "parent_id")
+	private Category parent;
+	@OneToMany(mappedBy = "parent")
+	private Set<Category> children = new HashSet<>();
+	
 	
 	public Category() {
 	}
@@ -56,11 +66,6 @@ public class Category {
 		this.alias = alias;
 	}
 	
-	@OneToOne
-	@JoinColumn(name = "parent_id")
-	private Category parent;
-	@OneToMany(mappedBy = "parent")
-	private Set<Category> children = new HashSet<>();
 	public Integer getId() {
 		return id;
 	}
@@ -87,6 +92,12 @@ public class Category {
 	}
 	public boolean isEnabled() {
 		return enabled;
+	}	
+	public String getAllParentIDs() {
+		return allParentIDs;
+	}
+	public void setAllParentIDs(String allParentIDs) {
+		this.allParentIDs = allParentIDs;
 	}
 	public void setEnabled(boolean enabled) {
 		this.enabled = enabled;
@@ -109,6 +120,8 @@ public class Category {
 	public void setChildren(Set<Category> children) {
 		this.children = children;
 	}
+	
+	
 	
 	public static Category copyIdAndName(Category category) {
 		Category copyCategory = new Category();
